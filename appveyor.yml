@@ -58,7 +58,7 @@ build_script:
     
     cmake --build ../build --target cloud_commander_ui
 
-    cd ../../
+    cd ../
 
     call 7z.exe a -bb3  NeonTech.zip bin\Debug
     
