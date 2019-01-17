@@ -44,7 +44,7 @@ set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (SFML_DIR D:/programming/SFML-2.4.2/)
 set (OGRE_DIR $ENV{OGRE_DIR})
 set (OGRE_HOME $ENV{OGRE_HOME})
-set (FFMPEG2 $ENV{FFMPEG})
+#set (FFMPEG2 $ENV{FFMPEG})
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
 set(OGRE_IMGUI_SRC ${CMAKE_SOURCE_DIR}/ogre-imgui)
@@ -77,6 +77,7 @@ endif()
 if(WIN32)
     set(CEF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary_3.3578.1860.g36610bd_windows32")
     set(CEF_BINARY_LINK "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2")
+    set(FFMPEG_BINARY_LINK "https://github.com/kenkit/Cloud_Commander_UI/blob/master/ffmpeg_dependancies.zip?raw=true")
 else()
     set(CEF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary_3.3578.1863.gbf8cff2_linux32")
     set(CEF_BINARY_LINK "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1863.gbf8cff2_linux32.tar.bz2")
@@ -96,6 +97,20 @@ else()
     else()
         message("Download succeeded")
     endif()  
+    if(WIN32)
+        message("Downloading ffmpeg binaries from:${FFMPEG_BINARY_LINK}" )
+        file(DOWNLOAD "${FFMPEG_BINARY_LINK}" ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip SHOW_PROGRESS STATUS status)
+        list(GET status 0 status_code)
+        list(GET status 1 status_string)
+        if(NOT status_code EQUAL 0)
+            message(WARN "error: downloading failed
+            status_code: ${status_code}
+            status_string: ${status_string}")
+        else()
+            message("Download succeeded")
+        endif()  
+    endif()
+
 endif()
 
 if(EXISTS ${CEF_ROOT})
@@ -112,6 +127,10 @@ else()
                 COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 )
+        execute_process(
+                COMMAND ${7ZIP_EXECUTABLE} x  -y -r ffmpeg_dependancies.zip
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
         else()
             execute_process(
             COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
@@ -122,6 +141,7 @@ endif()
 #/////////////////////////////////////////////////////////////////////////////
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
+set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg)
 find_package(CEF REQUIRED)
 
 
@@ -240,7 +260,7 @@ endif()
 find_package(OGRE 1.10 REQUIRED)
 link_directories(${FFMPEG}/Install/lib ${OGRE_DEPENDENCIES_DIR}/lib)
 
-string(REPLACE "\\" "/" FFMPEG ${FFMPEG2})
+#string(REPLACE "\\" "/" FFMPEG ${FFMPEG2})
 string(REPLACE "\\" "/" JSONPP ${JSONPP})
 string(REPLACE "\\" "/" RAPID_XML ${RAPID_XML})
 string(REPLACE "\\" "/" WSS_SOURCE_DIR ${WSS_SOURCE_DIR})
