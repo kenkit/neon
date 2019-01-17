@@ -575,26 +575,20 @@ COPY_FILES(cloud_commander_ui "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET
 COPY_FILES(cloud_commander_ui "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:cloud_commander_ui>)
 PRINT_CEF_CONFIG()
 
-
-add_custom_command(TARGET cloud_commander_ui POST_BUILD
-COMMAND ${CMAKE_COMMAND} -E
-copy_if_different  ${CFGFile} $<TARGET_FILE_DIR:cloud_commander_ui>
-        COMMENT "copying ${CFGFile}\n"
-)
-    if (WIN32)
+if (WIN32)
     add_custom_target(
-        package_project
-                COMMENT "packaging project into zip file"
+        package_project  ALL  
+            COMMENT "packaging project into zip file"
             COMMAND ${7ZIP_EXECUTABLE} a -bb3  NeonTech.zip *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
-        else()
+else()
     add_custom_target(
-            package_project
+            package_project  ALL  
                 COMMENT "packaging project into zip file"
-            COMMAND ${CMAKE_COMMAND} -E tar -czvf cef_binary.tar.bz *
+            COMMAND tar -czvf cef_binary.tar.bz *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
-    endif()
+endif()
 
 add_dependencies(package_project cloud_commander_ui)
