@@ -56,7 +56,7 @@ build_script:
 
     cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
     
-    cmake --build ../build --target cloud_commander_ui
+    cmake --build ../build --target package_project
 
     
 artifacts:
