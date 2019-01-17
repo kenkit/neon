@@ -60,7 +60,7 @@ build_script:
 
     
 artifacts:
-- path: bin/Debug/NeonTech.zip
+- path: NeonTech.zip
   name: NeonTech.zip
 before_deploy:
 - ps: >-
