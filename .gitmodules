@@ -1,0 +1,17 @@
+[submodule "imguiDock"]
+	path = imguiDock
+	url = https://github.com/BentleyBlanks/imguiDock.git
+
+[submodule "ogre-imgui"]
+	path = ogre-imgui
+	url = https://github.com/OGRECave/ogre-imgui.git
+	branch = master
+[submodule "json"]
+	path = json
+	url = https://github.com/nlohmann/json.git
+[submodule "Simple-WebSocket-Server"]
+	path = Simple-WebSocket-Server
+	url = https://github.com/eidheim/Simple-WebSocket-Server.git
+[submodule "rapidxml"]
+	path = rapidxml
+	url = https://github.com/dwd/rapidxml.git
