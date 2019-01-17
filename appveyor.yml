@@ -22,11 +22,11 @@ build_script:
 
     REM keybase oneshot -u kenkit --paperkey "%paperkey%"
 
-    set FFMPEG=%cd%\ffmpeg\ffmpeg
+    REM set FFMPEG=%cd%\ffmpeg\ffmpeg
 
-    echo "FFMPEG DIR:%FFMPEG%" 
+    REM echo "FFMPEG DIR:%FFMPEG%" 
 
-    call 7z x  -y -r ffmpeg_dependancies.zip
+    REM call 7z x  -y -r ffmpeg_dependancies.zip
 
     REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
 
