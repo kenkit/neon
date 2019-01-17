@@ -386,13 +386,12 @@ file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.dll )
          )
 endforeach()  
 find_package(Git)
-add_custom_command(TARGET cloud_commander_ui PRE_BUILD
+#[[add_custom_command(TARGET cloud_commander_ui PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/Cloud_Commander_UI
 COMMAND "${GIT_EXECUTABLE}" log -10  > Cloud_Commander_UI/Latest_Version_Info.txt
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                  COMMENT "Appending latest version info to secondary repo"
-)
-
+)]]
 string(REPLACE "\\" "/" OGRE_HOME_E ${OGRE_DIR})
 string(REPLACE "/CMake" ""  OGRE_HOME_E ${OGRE_HOME_E})
 string(REPLACE "/Cmake" ""  OGRE_HOME_E ${OGRE_HOME_E})
