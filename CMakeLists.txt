@@ -155,7 +155,7 @@ endif()
 set(Ogre_zip "${OGRE_HOME}/Latest_ogre.zip")
 string(REPLACE "/" "\\"  Ogre_zip  ${Ogre_zip})
 string(REPLACE "\\" "/"  OGRE_HOME  ${OGRE_HOME})
-
+if(WIN32)
 if(Downloaded_JS)
     file(DOWNLOAD "https://api.github.com/repos/kenkit/ogre/releases/latest" "${OGRE_HOME}/json_release.json" SHOW_PROGRESS STATUS status)
     file(READ "${OGRE_HOME}/json_release.json" JSON_OUTPUT)
@@ -236,6 +236,7 @@ file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
             file(REMOVE ${OGRE_HOME}/env.bat)
             message("set SDL2_DIR:${rv}")
 #----------------------------------------------------------------------
+endif()
 find_package(OGRE 1.10 REQUIRED)
 link_directories(${FFMPEG}/Install/lib ${OGRE_DEPENDENCIES_DIR}/lib)
 
