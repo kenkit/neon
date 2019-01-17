@@ -60,11 +60,6 @@ if (USE_BOOST_THREAD)
 else()
     find_package(Boost REQUIRED COMPONENTS  timer regex filesystem date_time) 
 endif()
-string(REPLACE "\\" "/" CEF_ROOT_2 $ENV{CEF_ROOT})
-set(CEF_ROOT ${CEF_ROOT_2})
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
-find_package(CEF REQUIRED)
-
 if (EXISTS "C:/Program Files (x86)")
     set(PROGRAM_FILES "C:/Program Files (x86)")
     message("64 BIT MACHINE")
@@ -78,6 +73,58 @@ if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
 elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
     SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
 endif()
+#/////////////////////////////////////////////////////////////////////////////
+if(WIN32)
+    set(CEF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary_3.3578.1860.g36610bd_windows32")
+    set(CEF_BINARY_LINK "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2")
+else()
+    set(CEF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary_3.3578.1863.gbf8cff2_linux32")
+    set(CEF_BINARY_LINK "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1863.gbf8cff2_linux32.tar.bz2")
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz)
+    message("Found existing binary archive, not downloading" )
+else()
+    message("Downloading cef binaries from:${CEF_BINARY_LINK}" )
+    file(DOWNLOAD "${CEF_BINARY_LINK}" "cef_binary.tar.bz" SHOW_PROGRESS STATUS status)
+    list(GET status 0 status_code)
+    list(GET status 1 status_string)
+    if(NOT status_code EQUAL 0)
+        message(WARN "error: downloading failed
+        status_code: ${status_code}
+        status_string: ${status_string}")
+    else()
+        message("Download succeeded")
+    endif()  
+endif()
+
+if(EXISTS ${CEF_ROOT})
+    message("Found existing cef binary dir(${CEF_ROOT}), not extracting")
+else()
+    message("dir(${CEF_ROOT}) is empty extracting..")
+    message("Extracting cef binaries")
+    if (WIN32)
+        execute_process(
+            COMMAND ${7ZIP_EXECUTABLE} x -y -r cef_binary.tar.bz
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            )
+        execute_process(
+                COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
+        else()
+            execute_process(
+            COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            )
+    endif()
+endif()
+#/////////////////////////////////////////////////////////////////////////////
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
+find_package(CEF REQUIRED)
+
+
 
 #string(REPLACE "\\" "/" PFILES "\"${PROGRAM_FILES}/Microsoft Visual Studio 14.0/VC/include\", \"${PROGRAM_FILES}/Windows Kits/10/Include/10.0.10240.0/ucrt\", \"${PROGRAM_FILES}/Windows Kits/10/Include/10.0.10150.0/ucrt\"")
 
@@ -290,9 +337,9 @@ set(TOTAL_INCLUDES
 #${OGRE_FFMPEG}/example
 #${OGRE_FFMPEG}/include
 ${SDL2_INCLUDE_DIRS}
-${OGRE_IMGUI_SRC}
-${OGRE_IMGUI_SRC}/imgui/
-${OGRE_IMGUI_SRC}/imgui/addons/imguidock/
+${CMAKE_SOURCE_DIR}/ogre-imgui
+${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/
+${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
 #${CMAKE_SOURCE_DIR}/sdl_al/
 ${CMAKE_SOURCE_DIR}/ffplay/ 
 ${FFMPEG}/include 
@@ -382,38 +429,38 @@ copy_if_different  ${SFML_DLL} $<TARGET_FILE_DIR:sfml_test>
 endforeach() ]]
 
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E make_directory  ${OGRE_IMGUI_SRC}/build
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre-imgui/build
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${OGRE_IMGUI_SRC}/imgui/addons/
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E make_directory  ${OGRE_IMGUI_SRC}/imgui/addons/imguidock/
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/CMakeLists.txt ${OGRE_IMGUI_SRC}/CMakeLists.txt
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/CMakeLists.txt ${CMAKE_SOURCE_DIR}/ogre-imgui/CMakeLists.txt
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/Example.cpp ${OGRE_IMGUI_SRC}/Example.cpp 
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/Example.cpp ${CMAKE_SOURCE_DIR}/ogre-imgui/Example.cpp 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
             
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.cpp ${OGRE_IMGUI_SRC}/imgui/addons/imguidock/
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.cpp ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
             
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.h ${OGRE_IMGUI_SRC}/imgui/addons/imguidock/
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.h ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
             
             execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.h ${OGRE_IMGUI_SRC}/imgui/addons/imguidock/
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.h ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})       
 
-        add_subdirectory(${OGRE_IMGUI_SRC} OgreImgui) 
+        add_subdirectory(${CMAKE_SOURCE_DIR}/ogre-imgui OgreImgui) 
         SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
         SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
         SET_EXECUTABLE_TARGET_PROPERTIES(Example)

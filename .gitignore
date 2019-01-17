@@ -8,7 +8,6 @@ out/
 lib/
 ogre-ffmpeg-videoplayer/
 ogre-imgui/build
-ogre-imgui
 ogre-imgui/.vscode
 imgui/
 imgui
