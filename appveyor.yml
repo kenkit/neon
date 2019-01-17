@@ -28,7 +28,7 @@ build_script:
 
     REM call 7z x  -y -r ffmpeg_dependancies.zip
 
-    REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
+    REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && REM call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
 
     set CEF_ROOT=%cd%\cef_binary_3.3578.1860.g36610bd_windows32
     
