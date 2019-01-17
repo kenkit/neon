@@ -30,11 +30,11 @@ build_script:
 
     REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && REM call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
 
-    set CEF_ROOT=%cd%\cef_binary_3.3578.1860.g36610bd_windows32
+    REM set CEF_ROOT=%cd%\cef_binary_3.3578.1860.g36610bd_windows32
     
-    copy /b/v/y imgui-files\cef_macros.cmake %CEF_ROOT%\cmake
+    REM copy /b/v/y imgui-files\cef_macros.cmake %CEF_ROOT%\cmake
 
-    copy /b/v/y imgui-files\cef_variables.cmake %CEF_ROOT%\cmake
+    REM copy /b/v/y imgui-files\cef_variables.cmake %CEF_ROOT%\cmake
 
     mkdir build
     

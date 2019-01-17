@@ -44,7 +44,7 @@ set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (SFML_DIR D:/programming/SFML-2.4.2/)
 set (OGRE_DIR $ENV{OGRE_DIR})
 set (OGRE_HOME $ENV{OGRE_HOME})
-set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg)
+#set (FFMPEG2 $ENV{FFMPEG})
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
 set(OGRE_IMGUI_SRC ${CMAKE_SOURCE_DIR}/ogre-imgui)
@@ -155,7 +155,12 @@ endif()
 #/////////////////////////////////////////////////////////////////////////////
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
-
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/cef_macros.cmake  ${CEF_ROOT}/cmake/cef_macros.cmake 
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/cef_variables.cmake  ${CEF_ROOT}/cmake/cef_variables.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(CEF REQUIRED)
 
 
@@ -460,8 +465,7 @@ COMMENT ">>>>>>>>>>>>>>>>>>copying ${DLLFile}<<<<<<<<<<<<<<<<<<<<<<<<"
 COMMAND ${CMAKE_COMMAND} -E
 copy_if_different  ${SFML_DLL} $<TARGET_FILE_DIR:sfml_test> 
 )
-endforeach() ]]
-
+endforeach() ]]   
             execute_process(
             COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre-imgui/build
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
