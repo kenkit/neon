@@ -1,0 +1,21 @@
+// This file was create automatically by CMake.
+#pragma once
+
+// Whether or not we retrieved the state of the repo.
+#define GIT_RETRIEVED_STATE @GIT_RETRIEVED_STATE@
+
+// The SHA1 for the HEAD of the repo.
+#define GIT_HEAD_SHA1 "@GIT_HEAD_SHA1@"
+
+#define COMMIT_AUTHOR "@COMMIT_AUTHOR@"
+
+#define COMMIT_MESSAGE "@COMMIT_MESSAGE@"
+
+#define COMMIT_DATE "@COMMIT_DATE@"
+// Whether or not there were uncommited changes present.
+#define GIT_IS_DIRTY @GIT_IS_DIRTY@
+
+// PROJECT_VERSION
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+
+
