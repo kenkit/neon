@@ -97,22 +97,23 @@ else()
     else()
         message("Download succeeded")
     endif()  
-    if(WIN32)
-        message("Downloading ffmpeg binaries from:${FFMPEG_BINARY_LINK}" )
-        file(DOWNLOAD "${FFMPEG_BINARY_LINK}" ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip SHOW_PROGRESS STATUS status)
-        list(GET status 0 status_code)
-        list(GET status 1 status_string)
-        if(NOT status_code EQUAL 0)
-            message(WARN "error: downloading failed
-            status_code: ${status_code}
-            status_string: ${status_string}")
-        else()
-            message("Download succeeded")
-        endif()  
-    endif()
-
 endif()
-
+if(WIN32)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip)
+        message("Found existing binary archive, not downloading" )
+    else()
+    message("Downloading ffmpeg binaries from:${FFMPEG_BINARY_LINK}" )
+    file(DOWNLOAD "${FFMPEG_BINARY_LINK}" ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip SHOW_PROGRESS STATUS status)
+    list(GET status 0 status_code)
+    list(GET status 1 status_string)
+    if(NOT status_code EQUAL 0)
+        message(WARN "error: downloading failed
+        status_code: ${status_code}
+        status_string: ${status_string}")
+    else()
+        message("Download succeeded")
+    endif()  
+endif()
 if(EXISTS ${CEF_ROOT})
     message("Found existing cef binary dir(${CEF_ROOT}), not extracting")
 else()
@@ -136,6 +137,18 @@ else()
             COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
+    endif()
+endif()
+if (WIN32)
+    if(EXISTS ${FFMPEG})
+        message("Found existing ffmpeg binary dir(${FFMPEG}), not extracting")
+    else()
+        message("dir(${FFMPEG}) is empty extracting..")
+        message("Extracting FFMPEG binaries")
+        execute_process(
+                    COMMAND ${7ZIP_EXECUTABLE} x  -y -r ffmpeg_dependancies.zip
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
     endif()
 endif()
 #/////////////////////////////////////////////////////////////////////////////
