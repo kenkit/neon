@@ -44,7 +44,7 @@ set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (SFML_DIR D:/programming/SFML-2.4.2/)
 set (OGRE_DIR $ENV{OGRE_DIR})
 set (OGRE_HOME $ENV{OGRE_HOME})
-#set (FFMPEG2 $ENV{FFMPEG})
+set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg)
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
 set(OGRE_IMGUI_SRC ${CMAKE_SOURCE_DIR}/ogre-imgui)
@@ -155,7 +155,7 @@ endif()
 #/////////////////////////////////////////////////////////////////////////////
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
-set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg)
+
 find_package(CEF REQUIRED)
 
 
