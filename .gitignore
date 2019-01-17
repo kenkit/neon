@@ -15,4 +15,9 @@ OgreVideoPlugin/build
 OgreVideoPlugin/.vscode
 OgreVideoPlugin
 version.h
-.DS_Store
+cef_binary_3.3578.1860.g36610bd_windows32
+ffmpeg
+*.zip
+*.bz
+*.gz
+*.tar
