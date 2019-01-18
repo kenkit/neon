@@ -64,8 +64,6 @@ artifacts:
   name: NeonTech.zip
 before_deploy:
 - ps: >-
-    cd neon
-
     echo "NEON CHANGELOG"  | Add-Content tmp
 
     echo "************************"  | Add-Content tmp
