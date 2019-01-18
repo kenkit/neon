@@ -42,8 +42,6 @@ set(RAPID_XML ${CMAKE_SOURCE_DIR}/rapidxml)
 set(JSONPP ${CMAKE_SOURCE_DIR}/json)
 set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (SFML_DIR D:/programming/SFML-2.4.2/)
-set (OGRE_DIR $ENV{OGRE_DIR})
-set (OGRE_HOME $ENV{OGRE_HOME})
 #set (FFMPEG2 $ENV{FFMPEG})
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
@@ -169,6 +167,11 @@ find_package(CEF REQUIRED)
 #string(REPLACE "\\" "/" PFILES "\"${PROGRAM_FILES}/Microsoft Visual Studio 14.0/VC/include\", \"${PROGRAM_FILES}/Windows Kits/10/Include/10.0.10240.0/ucrt\", \"${PROGRAM_FILES}/Windows Kits/10/Include/10.0.10150.0/ucrt\"")
 
 #----------------------------------------------------------------------
+
+
+set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
+set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre/sdk)
+set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/Dependencies)
 if(EXISTS ${CMAKE_SOURCE_DIR}/JSONParser.cmake)
     include(JSONParser.cmake)
     set(Downloaded_JS TRUE)
@@ -181,102 +184,130 @@ else ()
     endif()
 endif()
 
-
-
 if (WIN32)
-  set (show_contents_prog type)
-endif (WIN32)
+    if(EXISTS "${OGRE_HOME}/current_ogre")
+        file(READ "${OGRE_HOME}/current_ogre" current_version)
+    else()
+        set(current_version 0)
+    endif()
+    set(Ogre_zip "${OGRE_HOME}/Latest_ogre.zip")
+    if(Downloaded_JS)
+        file(DOWNLOAD "https://api.github.com/repos/kenkit/ogre/releases/latest" "${OGRE_HOME}/json_release.json" SHOW_PROGRESS STATUS status)
+        file(READ "${OGRE_HOME}/json_release.json" JSON_OUTPUT)
+        sbeParseJson(parsed_json JSON_OUTPUT)
+        set(latest_version ${parsed_json.tag_name})
+        set(download_url ${parsed_json.assets_0.browser_download_url}) 
+        string(COMPARE EQUAL "${latest_version}" "" result)
+        if(result)
+            message("No network??")  
+            set(latest_version ${current_version})
+        endif()
+        message("LATEST VERSION OF OGRE:REPO KENIT/OGRE ${latest_version} CURRENTLY INSTALLED ${current_version}")
+        string(REPLACE "." "" current_version ${current_version})
+        string(REPLACE "." ""  latest_version_2 ${latest_version})
+        if(NOT SKIP_DOWNLOADS)
+            if((current_version  LESS  latest_version_2 ) OR (current_version LESS_EQUAL "0" ))
+                message("DOWNLOADING NEW OGRE FROM KENKITS REPO:${download_url}" )
+                file(DOWNLOAD "${download_url}" "${Ogre_zip}" SHOW_PROGRESS STATUS status)
 
-if(EXISTS "${OGRE_HOME}/current_ogre")
-    file(READ "${OGRE_HOME}/current_ogre" current_version)
+                file(WRITE ${OGRE_HOME}/extract.bat "\"${7ZIP_EXECUTABLE}\" x  -y -r ${Ogre_zip} -o${OGRE_HOME}")
+
+                list(GET status 0 status_code)
+                list(GET status 1 status_string)
+                if(NOT status_code EQUAL 0)
+                    message(WARN "error: downloading failed
+                    status_code: ${status_code}
+                    status_string: ${status_string}")
+                else()
+                    message("Download succeeded")
+                    message("Removing old ogre in:${OGRE_HOME} ")
+                    if(EXISTS ${OGRE_HOME}/build/sdk)
+                        FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
+                        file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
+                        execute_process(COMMAND ${OGRE_HOME}/extract.bat RESULT_VARIABLE rv  OUTPUT_QUIET)
+                        message("Extraction:${rv}")
+                        file(REMOVE ${OGRE_HOME}/extract.bat)
+
+                        message("Setting ogre_dir environment variable")
+                        file(WRITE ${OGRE_HOME}/env.bat "set OGRE_DIR =\"${OGRE_HOME}/build/sdk/CMake\" && setx OGRE_DIR \"${OGRE_HOME}/build/sdk/CMake\"")
+                        execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv)
+                        file(REMOVE ${OGRE_HOME}/env.bat)
+                        message("OGRE_DIR $ENV{OGRE_DIR}")
+
+                        file(WRITE ${OGRE_HOME}/env.bat  "setx SDL2DIR \"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
+                        message("Setting SDL2_DIR environment variable")
+                        execute_process(COMMAND  ${OGRE_HOME}/env.bat RESULT_VARIABLE rv  OUTPUT_QUIET) 
+                        file(REMOVE ${OGRE_HOME}/env.bat) 
+
+                        message("setx SDL2_DIR:${rv}")
+
+                        file(WRITE ${OGRE_HOME}/env.bat  "set SDL2DIR =\"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
+                        execute_process(COMMAND   ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET) 
+                        file(REMOVE ${OGRE_HOME}/env.bat) 
+                        message("set SDL2DIR:${rv}")
+
+                        file(WRITE ${OGRE_HOME}/env.bat "setx SDL2_DIR \"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
+                        execute_process(COMMAND  ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET) 
+                        file(REMOVE ${OGRE_HOME}/env.bat)
+                        message("setx SDL2_DIR:${rv}") 
+
+                        set(OGRE_DEPENDENCIES_DIR ${OGRE_HOME}/build/sdk/ogredeps )
+                        file(WRITE ${OGRE_HOME}/env.bat "set SDL2_DIR =\"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
+                        execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET)
+                        file(REMOVE ${OGRE_HOME}/env.bat)
+                        message("set SDL2_DIR:${rv}")
+                        #---------------------------------------------------------------------
+                    endif()
+                endif()     
+            else ()
+                message("YOU HAVE THE LATEST OGRE INSTALLED")
+            endif()
+        else ()
+            message("<<<<<<<<<<<<<<<>-SKIPPING DOWNLOADS-<><<<<<<<<<<<<<<<")
+        endif()
+    endif()
 else()
-    set(current_version 0)
-endif()
-set(Ogre_zip "${OGRE_HOME}/Latest_ogre.zip")
-string(REPLACE "/" "\\"  Ogre_zip  ${Ogre_zip})
-string(REPLACE "\\" "/"  OGRE_HOME  ${OGRE_HOME})
-if(WIN32)
-if(Downloaded_JS)
-    file(DOWNLOAD "https://api.github.com/repos/kenkit/ogre/releases/latest" "${OGRE_HOME}/json_release.json" SHOW_PROGRESS STATUS status)
-    file(READ "${OGRE_HOME}/json_release.json" JSON_OUTPUT)
-    sbeParseJson(parsed_json JSON_OUTPUT)
-    set(latest_version ${parsed_json.tag_name})
-    set(download_url ${parsed_json.assets_0.browser_download_url}) 
-
-    string(COMPARE EQUAL "${latest_version}" "" result)
-    if(result)
-        message("No network??")  
-       set(latest_version ${current_version})
+    if(EXISTS "${CMAKE_SOURCE_DIR}/ogre")
+        message("Found ogre in ${CMAKE_SOURCE_DIR}/ogre")
+        message("Pulling Ogre from ogrecave")
+        execute_process(
+            COMMAND git pull -f 
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre)
+    else()
+        message("no ogre found")
+        message("cloning a fresh....")
+        execute_process(
+        COMMAND git clone https://github.com/OGRECave/ogre.git
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
     endif()
-    message("LATEST VERSION OF OGRE:REPO KENIT/OGRE ${latest_version} CURRENTLY INSTALLED ${current_version}")
-    string(REPLACE "." "" current_version ${current_version})
-    string(REPLACE "." ""  latest_version_2 ${latest_version})
-    if(NOT SKIP_DOWNLOADS)
-    if((current_version  LESS  latest_version_2 ) OR (current_version LESS_EQUAL "0" ))
-        message("DOWNLOADING NEW OGRE FROM KENKITS REPO:${download_url}" )
-        file(DOWNLOAD "${download_url}" "${Ogre_zip}" SHOW_PROGRESS STATUS status)
-
-       file(WRITE ${OGRE_HOME}/extract.bat "\"${7ZIP_EXECUTABLE}\" x  -y -r ${Ogre_zip} -o${OGRE_HOME}")
-
-       list(GET status 0 status_code)
-       list(GET status 1 status_string)
-        if(NOT status_code EQUAL 0)
-        message(WARN "error: downloading failed
-        status_code: ${status_code}
-        status_string: ${status_string}")
-   
-        else()
-            message("Download succeeded")
-            message("Removing old ogre in:${OGRE_HOME} ")
-            if(EXISTS ${OGRE_HOME}/build/sdk)
-                 FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
-           endif()
-            
-        endif()     
-    else ()
-        message("YOU HAVE THE LATEST OGRE INSTALLED")
+    message("Building ogre for linux")
+    if(EXISTS "${CMAKE_SOURCE_DIR}/ogre/build")
+        message("Directory ${CMAKE_SOURCE_DIR}/ogre/build exists not creating ")
+    else()
+        message("Creating Directory ${CMAKE_SOURCE_DIR}/ogre/build")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            )
     endif()
-    else ()
-        message("<<<<<<<<<<<<<<<>-SKIPPING DOWNLOADS-<><<<<<<<<<<<<<<<")
-    endif()
+    message("Genarating sources using:${CMAKE_GENERATOR} ")
+    execute_process(
+            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
+        )
+        message("Building ogre")
+    execute_process(
+            COMMAND ${CMAKE_COMMAND} --build  build
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/
+        )
+        message("Installing ogre to:${CMAKE_CURRENT_SOURCE_DIR}/ogre/build")
+    execute_process(
+            COMMAND make install
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
+        )
 endif()
 
-file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
-            execute_process(COMMAND ${OGRE_HOME}/extract.bat RESULT_VARIABLE rv  OUTPUT_QUIET)
-            message("Extraction:${rv}")
-            file(REMOVE ${OGRE_HOME}/extract.bat)
 
-            message("Setting ogre_dir environment variable")
-            file(WRITE ${OGRE_HOME}/env.bat "set OGRE_DIR =\"${OGRE_HOME}/build/sdk/CMake\" && setx OGRE_DIR \"${OGRE_HOME}/build/sdk/CMake\"")
-            execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv)
-            file(REMOVE ${OGRE_HOME}/env.bat)
-            message("OGRE_DIR $ENV{OGRE_DIR}")
-
-            file(WRITE ${OGRE_HOME}/env.bat  "setx SDL2DIR \"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
-            message("Setting SDL2_DIR environment variable")
-            execute_process(COMMAND  ${OGRE_HOME}/env.bat RESULT_VARIABLE rv  OUTPUT_QUIET) 
-            file(REMOVE ${OGRE_HOME}/env.bat) 
-
-
-            message("setx SDL2_DIR:${rv}")
-
-            file(WRITE ${OGRE_HOME}/env.bat  "set SDL2DIR =\"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
-            execute_process(COMMAND   ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET) 
-            file(REMOVE ${OGRE_HOME}/env.bat) 
-            message("set SDL2DIR:${rv}")
-
-            file(WRITE ${OGRE_HOME}/env.bat "setx SDL2_DIR \"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
-            execute_process(COMMAND  ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET) 
-            file(REMOVE ${OGRE_HOME}/env.bat)
-            message("setx SDL2_DIR:${rv}") 
-
-            set(OGRE_DEPENDENCIES_DIR ${OGRE_HOME}/build/sdk/ogredeps )
-            file(WRITE ${OGRE_HOME}/env.bat "set SDL2_DIR =\"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
-            execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET)
-            file(REMOVE ${OGRE_HOME}/env.bat)
-            message("set SDL2_DIR:${rv}")
-#----------------------------------------------------------------------
-endif()
 find_package(OGRE 1.10 REQUIRED)
 link_directories(${FFMPEG}/Install/lib ${OGRE_DEPENDENCIES_DIR}/lib)
 
@@ -433,10 +464,6 @@ COMMAND "${GIT_EXECUTABLE}" log -10  > Cloud_Commander_UI/Latest_Version_Info.tx
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                  COMMENT "Appending latest version info to secondary repo"
 )]]
-string(REPLACE "\\" "/" OGRE_HOME_E ${OGRE_DIR})
-string(REPLACE "/CMake" ""  OGRE_HOME_E ${OGRE_HOME_E})
-string(REPLACE "/Cmake" ""  OGRE_HOME_E ${OGRE_HOME_E})
-message("OGRE_HOME:${OGRE_HOME_E}")
 
 set(DLLFiles  
 #${OGRE_FFMPEG}/build/${CMAKE_BUILD_TYPE}/OgreVideoPlugin.dll

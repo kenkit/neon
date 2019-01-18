@@ -5,6 +5,7 @@ x64/
 bin/
 build/ 
 out/ 
+ogre 
 lib/
 ogre-ffmpeg-videoplayer/
 ogre-imgui/build
@@ -15,7 +16,7 @@ OgreVideoPlugin/build
 OgreVideoPlugin/.vscode
 OgreVideoPlugin
 version.h
-cef_binary_3.3578.1860.g36610bd_windows32
+cef_binary*
 ffmpeg
 *.zip
 *.bz
