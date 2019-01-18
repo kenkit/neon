@@ -46,8 +46,14 @@ set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
 set(OGRE_IMGUI_SRC ${CMAKE_SOURCE_DIR}/ogre-imgui)
-
-
+find_package(Git)
+if(GIT_FOUND)
+  message("git found: ${GIT_EXECUTABLE}")
+endif()
+find_package(Hg)
+if(HG_FOUND)
+  message("hg found: ${HG_EXECUTABLE}")
+endif()
 find_package(OpenSSL REQUIRED)
 
 set(Boost_USE_STATIC_LIBS ON) 
@@ -271,13 +277,13 @@ else()
         message("Found ogre in ${CMAKE_SOURCE_DIR}/ogre")
         message("Pulling Ogre from ogrecave")
         execute_process(
-            COMMAND git pull -f 
+            COMMAND ${GIT_EXECUTABLE} pull -f 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre)
     else()
         message("no ogre found")
         message("cloning a fresh....")
         execute_process(
-        COMMAND git clone https://github.com/OGRECave/ogre.git
+        COMMAND ${GIT_EXECUTABLE} clone https://github.com/OGRECave/ogre.git
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
     endif()
     message("Building ogre for linux")
@@ -289,6 +295,45 @@ else()
             COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
+    endif()
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies")
+        message("Directory ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies exists not creating ")
+    else()
+        message("Creating Directory ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/
+            )
+    endif()
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL")
+        message("Found SDL ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL")
+        message("Pulling Ogre from ogrecave")
+        execute_process(
+            COMMAND ${HG_EXECUTABLE} pull
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
+    else()
+        message("no ogre found")
+        message("cloning a fresh....")
+        execute_process(
+        COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies)
+    endif()
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL")
+        message("Creating build directory:${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL
+            )
+        message("Building sdl2")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} --build build
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
+        execute_process(
+            COMMAND make install
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
     endif()
     message("Genarating sources using:${CMAKE_GENERATOR} ")
     execute_process(
@@ -457,7 +502,6 @@ file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.dll )
                  COMMENT "copying ${CFGFile}\n"
          )
 endforeach()  
-find_package(Git)
 #[[add_custom_command(TARGET cloud_commander_ui PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/Cloud_Commander_UI
 COMMAND "${GIT_EXECUTABLE}" log -10  > Cloud_Commander_UI/Latest_Version_Info.txt
