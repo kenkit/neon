@@ -524,14 +524,14 @@ set(DLLFiles
 ${CEF_ROOT}/LICENSE.txt
 ${OPENSSL_ROOT_DIR}/libeay32.dll
 ${OPENSSL_ROOT_DIR}/ssleay32.dll
-${OGRE_HOME_E}/bin/RenderSystem_Direct3D11${build_type}.dll 
-${OGRE_HOME_E}/bin/RenderSystem_Direct3D9${build_type}.dll 
-${OGRE_HOME_E}/bin/OgreMain${build_type}.dll 
-${OGRE_HOME_E}/bin/OgreOverlay${build_type}.dll  
-${OGRE_HOME_E}/bin/OgreBites${build_type}.dll 
-${OGRE_HOME_E}/bin/OgreRTShaderSystem${build_type}.dll
-${OGRE_HOME_E}/bin/SDL2.dll
-${OGRE_HOME_E}/bin/zlib.dll
+${OGRE_HOME}/bin/RenderSystem_Direct3D11${build_type}.dll 
+${OGRE_HOME}/bin/RenderSystem_Direct3D9${build_type}.dll 
+${OGRE_HOME}/bin/OgreMain${build_type}.dll 
+${OGRE_HOME}/bin/OgreOverlay${build_type}.dll  
+${OGRE_HOME}/bin/OgreBites${build_type}.dll 
+${OGRE_HOME}/bin/OgreRTShaderSystem${build_type}.dll
+${OGRE_HOME}/bin/SDL2.dll
+${OGRE_HOME}/bin/zlib.dll
 )
 foreach(DLLFile ${DLLFiles})
          add_custom_command(TARGET cloud_commander_ui POST_BUILD
@@ -645,7 +645,7 @@ endforeach() ]]
             message("Could not find boost!")
         endif()
 if (WIN32)
-file(GLOB rtshaders ${OGRE_HOME_E}/media/RTShaderLib/*.)
+file(GLOB rtshaders ${OGRE_HOME}/media/RTShaderLib/*.)
 foreach(shader ${rtshaders})
 add_custom_command(TARGET cloud_commander_ui POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E
