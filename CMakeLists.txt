@@ -502,7 +502,7 @@ endforeach()
 set(new_includes  "${PFILES},${new_includes}" ) 
 
 file(WRITE "${CMAKE_SOURCE_DIR}/.vscode/c_cpp_properties.json" "{\n\"configurations\": [\n{\n            \"name\": \"Win32\",\n            \"browse\": {\n                \"path\": [\n                   ${new_includes}\n                 ],\n                \"limitSymbolsToIncludedHeaders\": true\n            },\n            \"includePath\": [\n                ${new_includes} \n            ],\n            \"defines\": [\n                \"_DEBUG\",\n                \"UNICODE\",\n                \"_UNICODE\"\n            ],\n            \"cStandard\": \"c11\",\n            \"cppStandard\": \"c++11\",\n            \"intelliSenseMode\": \"msvc-x64\"\n        }\n    ],    \"version\": 4\n}")
-
+if (WIN32)
 file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.dll )
      foreach(CFGFile ${CFGFiles})
          add_custom_command(TARGET cloud_commander_ui POST_BUILD
@@ -517,7 +517,6 @@ COMMAND "${GIT_EXECUTABLE}" log -10  > Cloud_Commander_UI/Latest_Version_Info.tx
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                  COMMENT "Appending latest version info to secondary repo"
 )]]
-
 set(DLLFiles  
 #${OGRE_FFMPEG}/build/${CMAKE_BUILD_TYPE}/OgreVideoPlugin.dll
 ${CEF_ROOT}/LICENSE.txt
@@ -538,7 +537,8 @@ foreach(DLLFile ${DLLFiles})
          COMMAND ${CMAKE_COMMAND} -E
          copy_if_different  ${DLLFile} $<TARGET_FILE_DIR:cloud_commander_ui> 
          )
-endforeach() 
+endforeach()
+endif() 
 #[[
 foreach(DLLFile ${SFML_DLL})
 add_custom_command(TARGET sfml_test POST_BUILD
@@ -642,7 +642,7 @@ endforeach() ]]
         else()
             message("Could not find boost!")
         endif()
-
+if (WIN32)
 file(GLOB rtshaders ${OGRE_HOME_E}/media/RTShaderLib/*.)
 foreach(shader ${rtshaders})
 add_custom_command(TARGET cloud_commander_ui POST_BUILD
@@ -651,6 +651,7 @@ copy_if_different  ${shader} $<TARGET_FILE_DIR:cloud_commander_ui>/RTShaderLib
         COMMENT "copying ${shader}/RTShaderLib\n"
 )
 endforeach()  
+endif()
 COPY_FILES(cloud_commander_ui "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:cloud_commander_ui>)
 COPY_FILES(cloud_commander_ui "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:cloud_commander_ui>)
 PRINT_CEF_CONFIG()
