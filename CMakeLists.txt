@@ -342,6 +342,7 @@ else()
         execute_process(
             COMMAND make install
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
+        set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/cmake/SDL2)
     endif()
     message("Genarating sources using:${CMAKE_GENERATOR} ")
     execute_process(
