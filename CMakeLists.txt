@@ -220,9 +220,6 @@ if (WIN32)
             if((current_version  LESS  latest_version_2 ) OR (current_version LESS_EQUAL "0" ))
                 message("DOWNLOADING NEW OGRE FROM KENKITS REPO:${download_url}" )
                 file(DOWNLOAD "${download_url}" "${Ogre_zip}" SHOW_PROGRESS STATUS status)
-
-                file(WRITE ${OGRE_HOME}/extract.bat "\"${7ZIP_EXECUTABLE}\" x  -y -r ${Ogre_zip} -o${OGRE_HOME}")
-
                 list(GET status 0 status_code)
                 list(GET status 1 status_string)
                 if(NOT status_code EQUAL 0)
@@ -268,6 +265,12 @@ if (WIN32)
                         file(REMOVE ${OGRE_HOME}/env.bat)
                         message("set SDL2_DIR:${rv}")]]
                         #---------------------------------------------------------------------
+                    else()
+                        file(WRITE ${OGRE_HOME}/extract.bat "\"${7ZIP_EXECUTABLE}\" x  -y -r ${Ogre_zip} -o${OGRE_HOME}")
+                        file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
+                        execute_process(COMMAND ${OGRE_HOME}/extract.bat RESULT_VARIABLE rv  OUTPUT_QUIET)
+                        message("Extraction:${rv}")
+                        file(REMOVE ${OGRE_HOME}/extract.bat)
                     endif()
                 endif()     
             else ()
