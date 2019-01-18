@@ -232,10 +232,10 @@ if (WIN32)
                     if(EXISTS ${OGRE_HOME}/build/sdk)
                         FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
                         file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
-                        execute_process(COMMAND ${OGRE_HOME}/extract.bat RESULT_VARIABLE rv  OUTPUT_QUIET)
-                        message("Extraction:${rv}")
-                        file(REMOVE ${OGRE_HOME}/extract.bat)
-
+                        execute_process(
+                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r ${Ogre_zip}
+                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        )
                         #[[message("Setting ogre_dir environment variable")
                         file(WRITE ${OGRE_HOME}/env.bat "set OGRE_DIR =\"${OGRE_HOME}/build/sdk/CMake\" && setx OGRE_DIR \"${OGRE_HOME}/build/sdk/CMake\"")
                         execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv)
@@ -266,11 +266,10 @@ if (WIN32)
                         message("set SDL2_DIR:${rv}")]]
                         #---------------------------------------------------------------------
                     else()
-                        file(WRITE ${OGRE_HOME}/extract.bat "\"${7ZIP_EXECUTABLE}\" x  -y -r ${Ogre_zip} -o${OGRE_HOME}")
-                        file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
-                        execute_process(COMMAND ${OGRE_HOME}/extract.bat RESULT_VARIABLE rv  OUTPUT_QUIET)
-                        message("Extraction:${rv}")
-                        file(REMOVE ${OGRE_HOME}/extract.bat)
+                    execute_process(
+                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r ${Ogre_zip}
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    )
                     endif()
                 endif()     
             else ()
