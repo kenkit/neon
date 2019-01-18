@@ -174,10 +174,15 @@ find_package(CEF REQUIRED)
 
 #----------------------------------------------------------------------
 
-
-set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
-set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre/sdk)
-set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/Dependencies)
+if(WIN32)
+    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/OGRE/build/sdk/CMake)
+    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/OGRE/build/sdk)
+    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/ogredeps/cmake)
+else()
+    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
+    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre/sdk)
+    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/Dependencies)
+endif()
 if(EXISTS ${CMAKE_SOURCE_DIR}/JSONParser.cmake)
     include(JSONParser.cmake)
     set(Downloaded_JS TRUE)
@@ -234,7 +239,7 @@ if (WIN32)
                         message("Extraction:${rv}")
                         file(REMOVE ${OGRE_HOME}/extract.bat)
 
-                        message("Setting ogre_dir environment variable")
+                        #[[message("Setting ogre_dir environment variable")
                         file(WRITE ${OGRE_HOME}/env.bat "set OGRE_DIR =\"${OGRE_HOME}/build/sdk/CMake\" && setx OGRE_DIR \"${OGRE_HOME}/build/sdk/CMake\"")
                         execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv)
                         file(REMOVE ${OGRE_HOME}/env.bat)
@@ -261,7 +266,7 @@ if (WIN32)
                         file(WRITE ${OGRE_HOME}/env.bat "set SDL2_DIR =\"${OGRE_HOME}/build/sdk/ogredeps/cmake\"")
                         execute_process(COMMAND ${OGRE_HOME}/env.bat  RESULT_VARIABLE rv  OUTPUT_QUIET)
                         file(REMOVE ${OGRE_HOME}/env.bat)
-                        message("set SDL2_DIR:${rv}")
+                        message("set SDL2_DIR:${rv}")]]
                         #---------------------------------------------------------------------
                     endif()
                 endif()     
