@@ -28,7 +28,7 @@
 /* Include only the enabled headers since some compilers (namely, Sun
    Studio) will not omit unused inline functions and create undefined
    references to libraries that are not being built. */
-#include "media_object.h"
+
 #include "config.h"
 #include "compat/va_copy.h"
 #include "libavformat/avformat.h"

@@ -68,6 +68,5 @@ struct ogre_video_texture ogre_ff_texture;
 struct user_interface ui_setting;
 
 int start_player(struct Media_Object media_object);
-void init_opts(struct Media_Object media_object);
 void uninit_opts(void);
 #endif

@@ -1,6 +1,6 @@
 #ifndef MEDIA_OBJECT_H
 #define MEDIA_OBJECT_H 1
-struct Media_Object {
+typedef struct Media_Object {
   char *file_url_name;
   char *name;
   char *cookies;

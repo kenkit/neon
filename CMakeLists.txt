@@ -615,9 +615,10 @@ endforeach() ]]
     add_subdirectory(${CEF_ROOT}/libcef_dll libcef_dll_wrapper)
     add_dependencies(cloud_commander_ui  ffplay OgreImgui AlwaysCheckGit libcef_dll_wrapper)   
     ADD_LOGICAL_TARGET(libcef_lib ${CEF_LIB_DEBUG} ${CEF_LIB_RELEASE})
-
-    set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    if(WIN32)
+        set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+        set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    endif()
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
