@@ -54,7 +54,7 @@ build_script:
 
     set BOOST_ROOT=C:\Libraries\boost_1_67_0
 
-    cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
+    cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
     
     cmake --build ../build --target package_project
 
