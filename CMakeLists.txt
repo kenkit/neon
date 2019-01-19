@@ -42,9 +42,6 @@ set(RAPID_XML ${CMAKE_SOURCE_DIR}/rapidxml)
 set(JSONPP ${CMAKE_SOURCE_DIR}/json)
 set(WSS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Simple-WebSocket-Server)
 #set (SFML_DIR D:/programming/SFML-2.4.2/)
-if(WIN32)
-    set (FFMPEG2 $ENV{FFMPEG})
-endif()
 #set (OGRE_FFMPEG  ${CMAKE_SOURCE_DIR}/OgreVideoPlugin)
 set (OPEN_AL  $ENV{OPEN_AL})
 set(OGRE_IMGUI_SRC ${CMAKE_SOURCE_DIR}/ogre-imgui)
@@ -73,11 +70,14 @@ else()
     message("32 BIT MACHINE")
     set(PROGRAM_FILES "C:/Program Files")
 endif()
-
-if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
-    SET (7ZIP_EXECUTABLE "C:/Program Files (x86)/7-Zip/7z.exe")
-elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
-    SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
+if(WIN32)
+    if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files (x86)/7-Zip/7z.exe")
+    elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
+    endif()
+else()
+    SET (7ZIP_EXECUTABLE "7z")
 endif()
 #/////////////////////////////////////////////////////////////////////////////
 if(WIN32)
@@ -105,11 +105,17 @@ else()
     endif()  
 endif()
 if(WIN32)
-    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip)
-        message("Found existing binary archive(${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip), not downloading" )
-    else()
+    set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg)
+    set(ffmpeg_zip ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip)
+else()
+    set(FFMPEG ${CMAKE_CURRENT_SOURCE_DIR}/FFmpeg)
+    set(ffmpeg_zip  ${CMAKE_CURRENT_SOURCE_DIR}/FFmpeg_linux.zip)
+endif()
+if(EXISTS ${ffmpeg_zip})
+        message("Found existing binary archive(${ffmpeg_zip}), not downloading" )
+else()
         message("Downloading ffmpeg binaries from:${FFMPEG_BINARY_LINK}" )
-        file(DOWNLOAD "${FFMPEG_BINARY_LINK}" ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_dependancies.zip SHOW_PROGRESS STATUS status)
+        file(DOWNLOAD "${FFMPEG_BINARY_LINK}" ${${ffmpeg_zip}} SHOW_PROGRESS STATUS status)
         list(GET status 0 status_code)
         list(GET status 1 status_string)
         if(NOT status_code EQUAL 0)
@@ -119,7 +125,16 @@ if(WIN32)
         else()
             message("Download succeeded")
         endif()  
-    endif()
+endif()
+if(EXISTS ${FFMPEG})
+        message("Found existing ffmpeg binary dir(${FFMPEG}), not extracting")
+    else()
+        message("dir(${FFMPEG}) is empty extracting:${ffmpeg_zip}")
+        message("Extracting FFMPEG binaries")
+        execute_process(
+                    COMMAND ${7ZIP_EXECUTABLE} x  -y -r ${ffmpeg_zip}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
 endif()
 if(EXISTS ${CEF_ROOT})
     message("Found existing cef binary dir(${CEF_ROOT}), not extracting")
@@ -135,10 +150,6 @@ else()
                 COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 )
-        execute_process(
-                COMMAND ${7ZIP_EXECUTABLE} x  -y -r ffmpeg_dependancies.zip
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                )
         else()
             execute_process(
             COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
@@ -146,19 +157,8 @@ else()
             )
     endif()
 endif()
-set(FFMPEG ${CMAKE_SOURCE_DIR}/ffmpeg/ffmpeg)
-if (WIN32)
-    if(EXISTS ${FFMPEG})
-        message("Found existing ffmpeg binary dir(${FFMPEG}), not extracting")
-    else()
-        message("dir(${FFMPEG}) is empty extracting..")
-        message("Extracting FFMPEG binaries")
-        execute_process(
-                    COMMAND ${7ZIP_EXECUTABLE} x  -y -r ffmpeg_dependancies.zip
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-    endif()
-endif()
+
+
 #/////////////////////////////////////////////////////////////////////////////
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
@@ -396,14 +396,21 @@ file(GLOB FF_LIBS ${FFMPEG}/Install/lib/*.lib)
 message("FF OGRE:${FF_OGRE}")
 
 #add_library(ffplay  ${SDL_AL} )
-
+if(WIN32)
 add_custom_target(
     config_h
     COMMENT "FFPLAY:Coping ${FFMPEG}/config.h to ${FFMPEG}/config_ff.h"
     COMMAND ${CMAKE_COMMAND} -E
     copy_if_different  ${FFMPEG}/config.h ${FFMPEG}/config_ff.h
     )
- 
+else()
+    add_custom_target(
+        config_h
+        COMMENT "FFPLAY:Coping ${FFMPEG}/Install/config.h to ${FFMPEG}/Install/include/config_ff.h"
+        COMMAND ${CMAKE_COMMAND} -E
+        copy_if_different  ${FFMPEG}/config.h ${FFMPEG}/Install/include/config_ff.h
+        )
+endif()
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
     find_package(CEF REQUIRED)
 
