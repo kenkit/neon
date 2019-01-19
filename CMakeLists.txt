@@ -31,7 +31,13 @@ else()
     set(build_type "")
     set(build_type2 "")
 endif()
-
+if(WIN32)
+    set(lib_ext lib)
+    set(library_package .dll)
+else()
+    set(lib_ext a)
+    set(library_package .so)
+endif()
 message("XYXYXYXYXYX ${CMAKE_BUILD_TYPE} mode XYXYXYXYX")
 
 set(CRYPTOPP $ENV{CRYPTOPP})                    #internalize
@@ -348,7 +354,7 @@ else()
     endif()
     message("Genarating sources using:${CMAKE_GENERATOR} ")
     execute_process(
-            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type}.a
+            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type}.${lib_ext}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
         )
         message("Building ogre")
@@ -392,7 +398,7 @@ find_package(SDL2 REQUIRED)
 #file(GLOB FF_OGRE ${OGRE_FFMPEG}/example/*.cpp)
 #string(REPLACE "\\" "/" FF_OGRE ${FF_OGRE})
 #set(OPEN_AL_LIB ${OPEN_AL}/build/Debug/OpenAL32.lib)
-file(GLOB FF_LIBS ${FFMPEG}/Install/lib/*.lib)
+file(GLOB FF_LIBS ${FFMPEG}/Install/lib/*.${lib_ext})
 message("FF OGRE:${FF_OGRE}")
 
 #add_library(ffplay  ${SDL_AL} )
@@ -425,25 +431,35 @@ ${CMAKE_SOURCE_DIR}/web_sockets/*.cpp
 ${CMAKE_SOURCE_DIR}/gui-interface/*.cpp 
 ) 
 if(NOT CONSOLE_APP)
-add_executable(cloud_commander_ui  WIN32  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp #[[${CMAKE_SOURCE_DIR}/utilities/utilities.cpp 
-${CMAKE_SOURCE_DIR}/web_sockets/web_socket.cpp 
-${CMAKE_SOURCE_DIR}/gui-interface/gui_interface.cpp]] )
-message("BUILDING WIN32 GUI APPLICATION")
+if(WIN32)
+    add_executable(cloud_commander_ui  WIN32  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
+else()
+    add_executable(cloud_commander_ui   cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
+endif()
+    message("BUILDING WIN32 GUI APPLICATION")
 else()
 add_executable(cloud_commander_ui  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} #[[${CMAKE_SOURCE_DIR}/utilities/utilities.cpp 
 ${CMAKE_SOURCE_DIR}/web_sockets/web_socket.cpp 
 ${CMAKE_SOURCE_DIR}/gui-interface/gui_interface.cpp]] )
 message("BUILDING CONSOLE APPLICATION")
 endif()
-SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
+#SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
 
 #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_DEFINITIONS "_WIN32_WINNT=${ver}")
 if(USE_BOOST_THREAD)
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_DEFINITIONS "CONSOLE_APP=1 USE_BOOST_THREAD=1")
-    target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
+   if(WIN32)
+        target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
+    else()
+        target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
+    endif()
     message("|||||||||||| USING BOOST:THREAD ||||||||||||")
 else()
-    target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
+    if(WIN32)
+        target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
+    else()
+    target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1)
+    endif()
     message("|||||||||||| USING STD:THREAD ||||||||||||")
 endif()
 if(ORIG_FFPLAY)
@@ -464,7 +480,7 @@ include_directories(${OPEN_AL}/include)
 
 target_link_libraries(ffplay
 ${OPEN_AL_LIB}
-${OGRE_DEPENDENCIES_DIR}/lib/SDL2.lib ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.lib
+${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext}
 winmm
 )
 
@@ -512,7 +528,7 @@ set(new_includes  "${PFILES},${new_includes}" )
 
 file(WRITE "${CMAKE_SOURCE_DIR}/.vscode/c_cpp_properties.json" "{\n\"configurations\": [\n{\n            \"name\": \"Win32\",\n            \"browse\": {\n                \"path\": [\n                   ${new_includes}\n                 ],\n                \"limitSymbolsToIncludedHeaders\": true\n            },\n            \"includePath\": [\n                ${new_includes} \n            ],\n            \"defines\": [\n                \"_DEBUG\",\n                \"UNICODE\",\n                \"_UNICODE\"\n            ],\n            \"cStandard\": \"c11\",\n            \"cppStandard\": \"c++11\",\n            \"intelliSenseMode\": \"msvc-x64\"\n        }\n    ],    \"version\": 4\n}")
 if (WIN32)
-file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.dll )
+file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.${library_package} )
      foreach(CFGFile ${CFGFiles})
          add_custom_command(TARGET cloud_commander_ui POST_BUILD
          COMMAND ${CMAKE_COMMAND} -E
@@ -529,16 +545,16 @@ WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 set(DLLFiles  
 #${OGRE_FFMPEG}/build/${CMAKE_BUILD_TYPE}/OgreVideoPlugin.dll
 ${CEF_ROOT}/LICENSE.txt
-${OPENSSL_ROOT_DIR}/libeay32.dll
-${OPENSSL_ROOT_DIR}/ssleay32.dll
-${OGRE_HOME}/bin/RenderSystem_Direct3D11${build_type}.dll 
-${OGRE_HOME}/bin/RenderSystem_Direct3D9${build_type}.dll 
-${OGRE_HOME}/bin/OgreMain${build_type}.dll 
-${OGRE_HOME}/bin/OgreOverlay${build_type}.dll  
-${OGRE_HOME}/bin/OgreBites${build_type}.dll 
-${OGRE_HOME}/bin/OgreRTShaderSystem${build_type}.dll
-${OGRE_HOME}/bin/SDL2.dll
-${OGRE_HOME}/bin/zlib.dll
+${OPENSSL_ROOT_DIR}/libeay32.${library_package}
+${OPENSSL_ROOT_DIR}/ssleay32.${library_package}
+${OGRE_HOME}/bin/RenderSystem_Direct3D11${build_type}.${library_package} 
+${OGRE_HOME}/bin/RenderSystem_Direct3D9${build_type}.${library_package} 
+${OGRE_HOME}/bin/OgreMain${build_type}.${library_package} 
+${OGRE_HOME}/bin/OgreOverlay${build_type}.${library_package}  
+${OGRE_HOME}/bin/OgreBites${build_type}.${library_package}
+${OGRE_HOME}/bin/OgreRTShaderSystem${build_type}.${library_package}
+${OGRE_HOME}/bin/SDL2.${library_package}
+${OGRE_HOME}/bin/zlib.${library_package}
 )
 foreach(DLLFile ${DLLFiles})
          add_custom_command(TARGET cloud_commander_ui POST_BUILD
@@ -589,9 +605,20 @@ endforeach() ]]
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})       
 
         add_subdirectory(${CMAKE_SOURCE_DIR}/ogre-imgui OgreImgui) 
-        SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
-        SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
-        SET_EXECUTABLE_TARGET_PROPERTIES(Example)
+        
+        #target_compile_definitions(OgreImgui  PRIVATE  -D"snprintf sprintf_s")
+  
+            SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
+            SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
+            SET_EXECUTABLE_TARGET_PROPERTIES(Example)
+if(NOT WIN32)
+    target_compile_options(cloud_commander_ui PRIVATE "-fexceptions -frtti")
+    target_compile_options(OgreImgui PRIVATE -fexceptions)
+    target_compile_options(Example PRIVATE -fexceptions)
+
+endif()
+
+      
   #[[      file(MAKE_DIRECTORY ${OGRE_FFMPEG}/build)
         add_custom_target(ff_ogre_pre ALL        
         COMMENT "PREPARING OGRE_FFMPEG SOURCES IN:${OGRE_FFMPEG}"
@@ -648,7 +675,7 @@ endforeach() ]]
             ${FF_LIBS}
             winmm
             )
-            target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.lib ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.lib ${FF_LIBS})
+            target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${FF_LIBS})
         else()
             message("Could not find boost!")
         endif()

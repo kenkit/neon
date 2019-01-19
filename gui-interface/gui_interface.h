@@ -3,8 +3,9 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "media_object.h"
 #include "utilities.h"
-#include "windows.h"
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#include <windows.h>
+#endif
 #include "SDL.h"
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreMaterial.h>
@@ -27,7 +28,7 @@
 #include <iomanip>
 #include <map>
 #include <string>
-#include <windows.h>
+
 
 class ImguiExample : public OgreBites::ApplicationContext,
                      public OgreBites::InputListener {

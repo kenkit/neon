@@ -2,7 +2,9 @@
 #define UTILITIES_H 1
 #include "common.h"
 #include "rapidxml.hpp"
-#include "windows.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+  #include "windows.h"
+#endif
 #include <iostream>
 #include <vector>
 
