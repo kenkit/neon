@@ -3,7 +3,16 @@ project(CLUI)
 include(git_watcher.cmake)
 # specify which version you need
 # Set a default build type if none was specified
-
+macro(use_cxx11)
+  if (CMAKE_VERSION VERSION_LESS "3.1")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+    endif ()
+  else ()
+    set (CMAKE_CXX_STANDARD 11)
+  endif ()
+endmacro(use_cxx11)
+use_cxx11()
 set(default_build_type "Debug")
 
  
@@ -607,16 +616,20 @@ endforeach() ]]
         add_subdirectory(${CMAKE_SOURCE_DIR}/ogre-imgui OgreImgui) 
         
         #target_compile_definitions(OgreImgui  PRIVATE  -D"snprintf sprintf_s")
-  
-            SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
-            SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
-            SET_EXECUTABLE_TARGET_PROPERTIES(Example)
-if(NOT WIN32)
-    target_compile_options(cloud_commander_ui PRIVATE "-fexceptions -frtti")
-    target_compile_options(OgreImgui PRIVATE -fexceptions)
-    target_compile_options(Example PRIVATE -fexceptions)
+if(WIN32)
+        SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
+        SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
+        SET_EXECUTABLE_TARGET_PROPERTIES(Example)
+else()
+            #target_compile_options(OgreImgui PRIVATE "-Wformat-nonliteral")
+            #target_compile_options(cloud_commander_ui PRIVATE "-Wformat-nonliteral")
+            #target_compile_options(Example  PRIVATE "-Wformat-nonliteral")
+            set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wformat-nonliteral)
+            #add_compile_options(-Wformat-nonliteral)
 
+            include_directories(${CEF_INCLUDE_PATH})
 endif()
+
 
       
   #[[      file(MAKE_DIRECTORY ${OGRE_FFMPEG}/build)

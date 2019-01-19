@@ -66,9 +66,13 @@ public:
   bool copy_to_clipboard = false;
   Ogre::RenderWindow *mWindow = 0;
   Ogre::Root *root = 0;
-  std::atomic<double> refresh_rate = 63;
+  std::atomic<double> refresh_rate;
   double PCFreq = 0.0;
-  __int64 CounterStart = 0;
+  #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+     __int64 CounterStart = 0;
+  #else
+      uint64 CounterStart = 0;
+  #endif
   float gui_transparancy = -2.4f;
   Ogre::MaterialPtr renderMaterial;
   Ogre::Rectangle2D *mMiniScreen ;Ogre::Rectangle2D *cefScreen;
@@ -154,7 +158,7 @@ public:
                          int w, int h);
   void bind_material_texture(std::string material_name,
                              std::string texture_name, int w, int h);
-  Ogre::TexturePtr ImguiExample::create_texture(std::string texture_name, int w,
+  Ogre::TexturePtr create_texture(std::string texture_name, int w,
                                                 int h);
 
   void closeApp();

@@ -32,16 +32,18 @@
 #include <include/cef_app.h>
 #include <include/cef_client.h>
 
-
+ #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #undef main
 int CALLBACK WinMain(HINSTANCE hInstance, 
                         HINSTANCE hPrevInstance, 
                         LPSTR lpCmdLine, 
-                        int nCmdShow){
+                        int nCmdShow)
+#else
+int main(int argc, char *argv[])
+#endif
+{
 
-  UNREFERENCED_PARAMETER(hPrevInstance);
-  UNREFERENCED_PARAMETER(lpCmdLine);
-    CefMainArgs args(hInstance);
+    CefMainArgs args(argc, argv);
 
 
     {

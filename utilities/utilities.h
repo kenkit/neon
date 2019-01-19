@@ -40,7 +40,7 @@
 #include "media_object.h"
 extern ImVector<char *> Items;
 static char *Strdup(const char *str);
-void AddLog(const char *fmt, ...) IM_FMTARGS(2);
+void AddLog(const char *fmt, ...) ;
 float normalize(float input, float max, float min);
 void parse_xml(std::string to_parse);
 double GetCounter(double &CounterStart);
