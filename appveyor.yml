@@ -1,4 +1,7 @@
 version: 1.0.{build}
+skip_tags: true
+build:
+  verbosity: minimal
 image: Visual Studio 2017
 environment:
  global:
