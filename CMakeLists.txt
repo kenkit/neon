@@ -624,7 +624,7 @@ else()
             #target_compile_options(OgreImgui PRIVATE "-Wformat-nonliteral")
             #target_compile_options(cloud_commander_ui PRIVATE "-Wformat-nonliteral")
             #target_compile_options(Example  PRIVATE "-Wformat-nonliteral")
-            set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wformat-nonliteral)
+            set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wno-format-nonliteral)
             #add_compile_options(-Wformat-nonliteral)
 
             include_directories(${CEF_INCLUDE_PATH})
