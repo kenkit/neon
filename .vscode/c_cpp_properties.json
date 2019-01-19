@@ -1,0 +1,24 @@
+{
+"configurations": [
+{
+            "name": "Win32",
+            "browse": {
+                "path": [
+                   ,"/usr/local/include","/home/aiden/Desktop/neon/ffplay","/home/aiden/Desktop/neon/gui-interface","/home/aiden/Desktop/neon/web_sockets","/home/aiden/Desktop/neon/utilities","/home/aiden/Desktop/neon","/home/aiden/Desktop/neon/json/src","/home/aiden/Desktop/neon/rapidxml","/home/aiden/Desktop/neon/Simple-WebSocket-Server","/cryptopp","/usr/include","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE/RTShaderSystem","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE/Bites","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE","/home/aiden/Desktop/neon/ogre/build/Dependencies/include/SDL2","/home/aiden/Desktop/neon/FFmpeg/","/home/aiden/Desktop/neon/FFmpeg/fftools","/home/aiden/Desktop/neon/FFmpeg/include","/home/aiden/Desktop/neon/ffplay/","/home/aiden/Desktop/neon/ogre-imgui/imgui/addons/imguidock/","/home/aiden/Desktop/neon/ogre-imgui/imgui/","/home/aiden/Desktop/neon/ogre-imgui"
+                 ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                ,"/usr/local/include","/home/aiden/Desktop/neon/ffplay","/home/aiden/Desktop/neon/gui-interface","/home/aiden/Desktop/neon/web_sockets","/home/aiden/Desktop/neon/utilities","/home/aiden/Desktop/neon","/home/aiden/Desktop/neon/json/src","/home/aiden/Desktop/neon/rapidxml","/home/aiden/Desktop/neon/Simple-WebSocket-Server","/cryptopp","/usr/include","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE/RTShaderSystem","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE/Bites","/home/aiden/Desktop/neon/ogre/sdk/include/OGRE","/home/aiden/Desktop/neon/ogre/build/Dependencies/include/SDL2","/home/aiden/Desktop/neon/FFmpeg/","/home/aiden/Desktop/neon/FFmpeg/fftools","/home/aiden/Desktop/neon/FFmpeg/include","/home/aiden/Desktop/neon/ffplay/","/home/aiden/Desktop/neon/ogre-imgui/imgui/addons/imguidock/","/home/aiden/Desktop/neon/ogre-imgui/imgui/","/home/aiden/Desktop/neon/ogre-imgui" 
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],    "version": 4
+}
