@@ -22,8 +22,9 @@
 */
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
-#include <windows.h>
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+  #include <windows.h>
+#endif
 #include "ImguiManager.h"
 #include "imgui_dock.h"
 class ImguiExample : public OgreBites::ApplicationContext,

@@ -21,7 +21,6 @@
  * SOFTWARE.
 */
 #include "utilities.h"
-
 #ifdef BOOST_MAPS
 boost::container::flat_map<int, std::atomic<struct download_info>>
     active_connections;
@@ -33,7 +32,11 @@ std::map<int, std::atomic<struct download_info>> active_ul_connections;
 #endif
 double PCFreq = 0.0;
 bool set_cpu_freq = false;
-__int64 CounterStart = 0;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+  __int64 CounterStart = 0;
+#else
+  int64_t CounterStart = 0;
+#endif
 std::map<int, struct Alpha_map> anime_alpha_titles;
 std::map<int, struct Titles_map> anime_title_names_2;
 std::map<int, struct Episode_map> anime_temp_episodes;
@@ -297,11 +300,10 @@ float normalize(float input, float max, float min) {
   float normalized_x = (input - average) / range;
   return normalized_x;
 }
-void AddLog(const char *fmt, ...) IM_FMTARGS(2) {
+void AddLog(const char *fmt){
   // FIXME-OPT
   char buf[1024];
   va_list args;
-  va_start(args, fmt);
   vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
   buf[IM_ARRAYSIZE(buf) - 1] = 0;
   va_end(args);
@@ -315,7 +317,7 @@ static char *Strdup(const char *str) {
   void *buff = malloc(len);
   return (char *)memcpy(buff, (const void *)str, len);
 }
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 double StartCounter() {
   LARGE_INTEGER li;
   if (!QueryPerformanceFrequency(&li))
@@ -332,3 +334,7 @@ double GetCounter(double &CounterStart) {
   QueryPerformanceCounter(&li);
   return double(li.QuadPart - CounterStart) / PCFreq;
 }
+#else
+double StartCounter(){return 0;}
+double GetCounter(double &CounterStart) {return 0;}
+#endif

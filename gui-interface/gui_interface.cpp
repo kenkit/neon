@@ -25,7 +25,6 @@
 extern "C" {
 #include <ffplay.h>
 }
-#include "winuser.h"
 #include "version.h"
 extern struct ogre_video_texture ogre_ff_texture;
 extern struct user_interface ui_setting;
@@ -944,8 +943,7 @@ bool ImguiExample::frameEnded(const Ogre::FrameEvent &evt) {
   // std::cout<<"ELAPSED:"<<elapsed<<std::endl;
   double refresh_r = refresh_rate.load();
   if (refresh_r - active_timers[0].total_elapsed_frq > 1)
-    Sleep(refresh_r);
-
+    boost::this_thread::sleep_for(boost::chrono::milliseconds((int)refresh_r));
   return OgreBites::ApplicationContext::frameEnded(evt);
 }
 
@@ -1114,7 +1112,7 @@ void ImguiExample::setup() {
 
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
        CefWindowHandle windowHandle;
-        windowHandle=(HWND)mWindow->getCustomAttribute("WINDOW");
+        windowHandle=(int)mWindow->getCustomAttribute("WINDOW");
         window_info.SetAsWindowless(windowHandle); // false means no transparency (site background colour)
 
         browserClient = new BrowserClient(renderHandler);
@@ -1306,6 +1304,7 @@ event->size().height());           // to either of width/height
    event->accept(); // we've finished processing resize event here
 }
       */
+     #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
       HWND handle = ::FindWindow(NULL, L"Cloud_Commander_UI");
       if (ogre_ff_texture.coded_h < 360) {
 
@@ -1316,6 +1315,7 @@ event->size().height());           // to either of width/height
                      ogre_ff_texture.coded_h,
                      SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOMOVE |
                          SWP_NOZORDER);
+      #endif
       Ogre::MaterialPtr material =
           Ogre::MaterialManager::getSingleton().getByName("video_material");
       mMiniScreen->setMaterial(material);

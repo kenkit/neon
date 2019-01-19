@@ -27,6 +27,7 @@
 #include "utilities.h"
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
+#include "winuser.h"
 #endif
 #include "SDL.h"
 #include <OgreHardwarePixelBuffer.h>
@@ -38,8 +39,9 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/container/flat_map.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <boost/chrono.hpp>
+#include <boost/thread/thread.hpp> 
 #ifdef USE_BOOST_THREAD
-  #include <boost/thread.hpp>
 #else
   #include <thread>
 #endif

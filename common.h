@@ -89,7 +89,7 @@ struct elapsed_time {
   bool global_update;
   // total_elapsed.total_milliseconds() << std::endl;
 };
-void AddLog(const char *fmt, ...);
+void AddLog(const char *fmt);
 
 #ifdef BOOST_MAPS
 extern boost::container::flat_map<int, struct elapsed_time> active_timers;

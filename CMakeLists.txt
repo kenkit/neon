@@ -12,7 +12,7 @@ macro(use_cxx11)
     set (CMAKE_CXX_STANDARD 11)
   endif ()
 endmacro(use_cxx11)
-use_cxx11()
+#use_cxx11()
 set(default_build_type "Debug")
 
  
@@ -467,7 +467,7 @@ else()
     if(WIN32)
         target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
     else()
-    target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1)
+        target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1)
     endif()
     message("|||||||||||| USING STD:THREAD ||||||||||||")
 endif()
@@ -622,9 +622,9 @@ if(WIN32)
         SET_EXECUTABLE_TARGET_PROPERTIES(Example)
 else()
             #target_compile_options(OgreImgui PRIVATE "-Wformat-nonliteral")
-            #target_compile_options(cloud_commander_ui PRIVATE "-Wformat-nonliteral")
+            #target_compile_options(cloud_commander_ui PRIVATE  -Wno-format-nonliteral)
             #target_compile_options(Example  PRIVATE "-Wformat-nonliteral")
-            set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wno-format-nonliteral)
+            #set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wno-format-nonliteral)
             #add_compile_options(-Wformat-nonliteral)
 
             include_directories(${CEF_INCLUDE_PATH})
@@ -668,11 +668,11 @@ endif()
            #set_target_properties( cloud_commander_ui PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
             #set_target_properties( ffplay PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
 	    endif()
-        if(USE_SANDBOX)
+        #[[if(USE_SANDBOX)
         # Logical target used to link the cef_sandbox library.
         ADD_LOGICAL_TARGET("cef_sandbox_lib" "${CEF_SANDBOX_LIB_DEBUG}" "${CEF_SANDBOX_LIB_RELEASE}")
         target_link_libraries(cloud_commander_ui cef_sandbox_lib ${CEF_SANDBOX_STANDARD_LIBS} )
-      endif()
+      endif()]]
         set_target_properties(ffplay PROPERTIES ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_SOURCE_DIR}/lib)
 #[[
         target_link_libraries(sfml_test
@@ -682,16 +682,13 @@ endif()
         winmm
         )
    ]]      
-        
-        if(Boost_FOUND)
-            target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES} 
-            ${FF_LIBS}
-            winmm
-            )
-            target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${FF_LIBS})
-        else()
-            message("Could not find boost!")
-        endif()
+if(WIN32)
+    target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
+else()
+    target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES}  ${FF_LIBS})
+endif()
+target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${FF_LIBS})
+
 if (WIN32)
 file(GLOB rtshaders ${OGRE_HOME}/media/RTShaderLib/*.)
 foreach(shader ${rtshaders})
