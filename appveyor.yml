@@ -44,17 +44,17 @@ build_script:
     
     mkdir OGRE
 
-    set OGRE_DIR=%cd%\OGRE\build\sdk\CMake
+    REM set OGRE_DIR=%cd%\OGRE\build\sdk\CMake
 
-    set OGRE_HOME=%cd%\OGRE
+    REM set OGRE_HOME=%cd%\OGRE
 
-    set SDL2_DIR=%OGRE_HOME%\build\sdk\ogredeps\cmake
+    REM set SDL2_DIR=%OGRE_HOME%\build\sdk\ogredeps\cmake
 
-    echo "Ogre:%OGRE_DIR%"
+    REM echo "Ogre:%OGRE_DIR%"
 
     set BOOST_ROOT=C:\Libraries\boost_1_67_0
 
-    cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
+    cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
     
     cmake --build ../build --target package_project
 
