@@ -1112,7 +1112,11 @@ void ImguiExample::setup() {
 
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
        CefWindowHandle windowHandle;
-        windowHandle=(int)mWindow->getCustomAttribute("WINDOW");
+       #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+          windowHandle=(HWND)mWindow->getCustomAttribute("WINDOW");
+       #else
+          windowHandle=(int)mWindow->getCustomAttribute("WINDOW");
+        #endif
         window_info.SetAsWindowless(windowHandle); // false means no transparency (site background colour)
 
         browserClient = new BrowserClient(renderHandler);

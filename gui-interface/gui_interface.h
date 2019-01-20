@@ -28,6 +28,8 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #include "winuser.h"
+#else
+#include <gdk/gdkx.h>
 #endif
 #include "SDL.h"
 #include <OgreHardwarePixelBuffer.h>

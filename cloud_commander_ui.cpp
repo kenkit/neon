@@ -37,13 +37,17 @@
 int CALLBACK WinMain(HINSTANCE hInstance, 
                         HINSTANCE hPrevInstance, 
                         LPSTR lpCmdLine, 
-                        int nCmdShow)
+                        int nCmdShow){
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+    CefMainArgs args(hInstance);
 #else
 int main(int argc, char *argv[])
-#endif
 {
 
     CefMainArgs args(argc, argv);
+#endif
+
 
 
     {
