@@ -25,8 +25,10 @@
 #include "client_ws.hpp"
 #include "utilities.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/chrono.hpp>
-#include <boost/thread/thread.hpp> 
+#ifdef USE_BOOST_THREAD
+    #include <boost/chrono.hpp>
+    #include <boost/thread/thread.hpp> 
+#endif
 void client_socket(void);
 
 #endif
