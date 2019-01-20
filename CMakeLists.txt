@@ -353,7 +353,7 @@ else()
             )
         message("Building sdl2")
         execute_process(
-            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
         execute_process(
             COMMAND ${CMAKE_COMMAND} --build build
@@ -365,7 +365,7 @@ else()
     endif()
     message("Genarating sources using:${CMAKE_GENERATOR} ")
     execute_process(
-            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type}.${lib_ext}
+            COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type}.${lib_ext}  
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
         )
         message("Building ogre")
@@ -489,11 +489,6 @@ set_target_properties(ffmpeg_ffplay PROPERTIES COMPILE_DEFINITIONS "TEST=1")
 include_directories(${OPEN_AL}/include)
 #file(GLOB SFML_LIBS ${SFML_DIR}/lib/*-d.lib)
 
-target_link_libraries(ffplay
-${OPEN_AL_LIB}
-${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext}
-winmm
-)
 
 set(TOTAL_INCLUDES
 #${OGRE_FFMPEG}/example
@@ -664,8 +659,14 @@ endif()
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
-        target_link_libraries(cloud_commander_ui ffplay libcef_lib libcef_dll_wrapper  ${CEF_STANDARD_LIBS})
-     if( MSVC )
+        target_link_libraries(cloud_commander_ui ffplay libcef_dll_wrapper)
+        if(WIN32)
+           target_link_libraries(cloud_commander_ui libcef_lib   ${CEF_STANDARD_LIBS})
+        else()
+        set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+        target_link_libraries(cloud_commander_ui libcef_lib   ${CEF_STANDARD_LIBS})
+        endif()
+        if( MSVC )
             #ADD_DEFINITIONS("/EHsc")
            #set_target_properties( cloud_commander_ui PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
             #set_target_properties( ffplay PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
@@ -686,10 +687,20 @@ endif()
    ]]      
 if(WIN32)
     target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
+
+    target_link_libraries(ffplay
+    ${SDL2_LIBRARIES}
+    winmm
+    )
 else()
     target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES}  ${FF_LIBS})
+
+    target_link_libraries(ffplay ${FF_LIBS}
+    ${SDL2_LIBRARIES}
+    )
 endif()
-target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${FF_LIBS})
+target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES} ${FF_LIBS})
+
 
 if (WIN32)
 file(GLOB rtshaders ${OGRE_HOME}/media/RTShaderLib/*.)

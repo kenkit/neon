@@ -29,7 +29,7 @@
 #include <windows.h>
 #include "winuser.h"
 #else
-#include <gdk/gdkx.h>
+//#include <gdk/gdkx.h>
 #endif
 #include "SDL.h"
 #include <OgreHardwarePixelBuffer.h>
