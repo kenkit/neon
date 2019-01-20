@@ -1,8 +1,7 @@
 # Neon Project
 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/dapr240j1ignrsrl?svg=true)](https://ci.appveyor.com/project/kenkit/neon)   [![codecov](https://codecov.io/gh/kenkit/neon/branch/master/graph/badge.svg)](https://codecov.io/gh/kenkit/neon)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/dapr240j1ignrsrl?svg=true)](https://ci.appveyor.com/project/kenkit/neon)[![codecov](https://codecov.io/gh/kenkit/neon/branch/master/graph/badge.svg)](https://codecov.io/gh/kenkit/neon)
 
 Neon is the a project designed by Neon Itelligence.
 
@@ -12,7 +11,6 @@ Neon is the a project designed by Neon Itelligence.
   - File download manager.
   - Everything is a WIP atm.
   - To-Do fix readme
-
 
 ### Installation
 
@@ -33,16 +31,15 @@ Want to contribute? Great!
 Just create a pull request, we will be happy to integrate new features.
 
 #### Building for source
+
 To build Neon you must have cmake, the rest is almost automated
 ```
 mkdir build
 cd build
 cmake ../
-
 ```
 
 Generating pre-built zip archives for distribution:
-
 ``` 
 cmake --build ../build
 
@@ -57,7 +54,6 @@ License
 ----
 
 MIT
-
 
 **Free Software, Hell Yeah!**
 
