@@ -4,7 +4,7 @@ extraction:
       command:
         - mkdir _build
         - cd _build
-        - cmake ..
+        - cmake .. -DFORCE_OPERATIONS=TRUE
     index:
         build_command:
             - cd _build
