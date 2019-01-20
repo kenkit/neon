@@ -192,9 +192,9 @@ find_package(CEF REQUIRED)
 #----------------------------------------------------------------------
 
 if(WIN32)
-    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/build/sdk/CMake)
-    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/build/sdk)
-    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/build/sdk/ogredeps)
+    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/CMake)
+    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre)
+    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/ogredeps)
     set(SDL2_DIR ${OGRE_DEPENDENCIES_DIR}/cmake)
 else()
     set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
