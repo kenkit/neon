@@ -41,9 +41,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/container/flat_map.hpp>
 #include <boost/range/iterator_range.hpp>
-#include <boost/chrono.hpp>
-
 #ifdef USE_BOOST_THREAD
+#include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp> 
 #else
   #include <thread>
