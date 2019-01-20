@@ -75,7 +75,6 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME ON) 
 
 find_package(Boost REQUIRED COMPONENTS thread timer regex filesystem date_time) 
-
 if (EXISTS "C:/Program Files (x86)")
     set(PROGRAM_FILES "C:/Program Files (x86)")
     message("64 BIT MACHINE")
@@ -190,16 +189,14 @@ find_package(CEF REQUIRED)
 #----------------------------------------------------------------------
 
 if(WIN32)
-    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/CMake)
-    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre)
-    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/ogredeps)
+    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/build/sdk/CMake)
+    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/build/sdk)
+    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/build/sdk/ogredeps)
     set(SDL2_DIR ${OGRE_DEPENDENCIES_DIR}/cmake)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ogre/build/sdk/CMake ${OGRE_DEPENDENCIES_DIR}/cmake )
 else()
     set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
     set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre/sdk)
     set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/Dependencies)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
 endif()
 if(EXISTS ${CMAKE_SOURCE_DIR}/JSONParser.cmake)
     include(JSONParser.cmake)
@@ -556,14 +553,14 @@ set(DLLFiles
 ${CEF_ROOT}/LICENSE.txt
 ${OPENSSL_ROOT_DIR}/libeay32.${library_package}
 ${OPENSSL_ROOT_DIR}/ssleay32.${library_package}
-${OGRE_HOME}/build/sdk/bin/RenderSystem_Direct3D11${build_type}.${library_package} 
-${OGRE_HOME}/build/sdk/bin/RenderSystem_Direct3D9${build_type}.${library_package} 
-${OGRE_HOME}/build/sdk/bin/OgreMain${build_type}.${library_package} 
-${OGRE_HOME}/build/sdk/bin/OgreOverlay${build_type}.${library_package}  
-${OGRE_HOME}/build/sdk/bin/OgreBites${build_type}.${library_package}
-${OGRE_HOME}/build/sdk/bin/OgreRTShaderSystem${build_type}.${library_package}
-${OGRE_HOME}/build/sdk/bin/SDL2.${library_package}
-${OGRE_HOME}/build/sdk/bin/zlib.${library_package}
+${OGRE_HOME}/bin/RenderSystem_Direct3D11${build_type}.${library_package} 
+${OGRE_HOME}/bin/RenderSystem_Direct3D9${build_type}.${library_package} 
+${OGRE_HOME}/bin/OgreMain${build_type}.${library_package} 
+${OGRE_HOME}/bin/OgreOverlay${build_type}.${library_package}  
+${OGRE_HOME}/bin/OgreBites${build_type}.${library_package}
+${OGRE_HOME}/bin/OgreRTShaderSystem${build_type}.${library_package}
+${OGRE_HOME}/bin/SDL2.${library_package}
+${OGRE_HOME}/bin/zlib.${library_package}
 )
 foreach(DLLFile ${DLLFiles})
          add_custom_command(TARGET cloud_commander_ui POST_BUILD
@@ -690,7 +687,7 @@ endif()
 target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES}  ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${FF_LIBS})
 
 if (WIN32)
-file(GLOB rtshaders ${OGRE_HOME}/build/sdk/media/RTShaderLib/*.)
+file(GLOB rtshaders ${OGRE_HOME}/media/RTShaderLib/*.)
 foreach(shader ${rtshaders})
 add_custom_command(TARGET cloud_commander_ui POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E
