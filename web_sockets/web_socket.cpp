@@ -147,8 +147,17 @@ void client_socket(void) {
 
   while (!is_quit.load()) {
     while (!system_ready.load())
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
+         #ifdef USE_BOOST_THREAD
+          boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
+        #else
+          Sleep(100);
+        #endif
+
     client.start();
-   boost::this_thread::sleep_for(boost::chrono::milliseconds(500));
+         #ifdef USE_BOOST_THREAD
+          boost::this_thread::sleep_for(boost::chrono::milliseconds(500));
+        #else
+          Sleep(500);
+        #endif
   }
 }

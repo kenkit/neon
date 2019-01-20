@@ -943,7 +943,11 @@ bool ImguiExample::frameEnded(const Ogre::FrameEvent &evt) {
   // std::cout<<"ELAPSED:"<<elapsed<<std::endl;
   double refresh_r = refresh_rate.load();
   if (refresh_r - active_timers[0].total_elapsed_frq > 1)
-    boost::this_thread::sleep_for(boost::chrono::milliseconds((int)refresh_r));
+     #ifdef USE_BOOST_THREAD
+       boost::this_thread::sleep_for(boost::chrono::milliseconds((int)refresh_r));
+    #else
+              Sleep(refresh_r);
+    #endif
   return OgreBites::ApplicationContext::frameEnded(evt);
 }
 
