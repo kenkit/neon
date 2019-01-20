@@ -321,8 +321,8 @@ endmacro()
 set(Downloaded_JS TRUE)
 
 if(Downloaded_JS)
-        file(DOWNLOAD "https://api.github.com/repos/kenkit/neon/releases/latest" "${CMAKE_SOURCE_DIR}/build/json_release.json" SHOW_PROGRESS STATUS status)
-        file(READ "${CMAKE_SOURCE_DIR}/build/json_release.json" JSON_OUTPUT)
+        file(DOWNLOAD "https://api.github.com/repos/kenkit/neon/releases/latest" "${CMAKE_SOURCE_DIR}/build/project_release.json" SHOW_PROGRESS STATUS status)
+        file(READ "${CMAKE_SOURCE_DIR}/build/project_release.json" JSON_OUTPUT)
         sbeParseJson(parsed_json JSON_OUTPUT)
        
     if(NOT status EQUAL 0)

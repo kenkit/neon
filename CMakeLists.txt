@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 project(CLUI)
-include(git_watcher.cmake)
+include(${CMAKE_SOURCE_DIR}/git_watcher.cmake)
+set(PRE_CONFIGURE_FILE "version.h.in")
+set(POST_CONFIGURE_FILE "version.h")
 # specify which version you need
 # Set a default build type if none was specified
 macro(use_cxx11)
