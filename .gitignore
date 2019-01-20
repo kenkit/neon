@@ -10,6 +10,7 @@ lib/
 ogre-ffmpeg-videoplayer/
 ogre-imgui/build
 ogre-imgui/.vscode
+.vscode/
 imgui/
 imgui
 OgreVideoPlugin/build
