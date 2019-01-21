@@ -44,7 +44,7 @@ cd build
 cmake ../
 ```
 
-Generating pre* built zip archives for distribution:
+Generating prebuilt zip archives for distribution:
 ``` 
 cmake --build ../build
 
