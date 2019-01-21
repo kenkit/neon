@@ -5,8 +5,9 @@ compiler:
   - clang
 
 before_script:
-  - mkdir build
-  - cd build
-  - cmake ..
+  - export CFLAGS="-m64 -static -fPIC" && export CXXFLAGS="-m64 -static -fPIC" && export LDFLAGS="-m64 -static -fPIC"
+  - mkdir _build
+  - cd _build
+  - cmake .. -DFORCE_OPERATIONS=TRUE -DUSE_BOOST_THREAD=TRUE 
 
-script: make && make test
+script: cd _build && make 
