@@ -10,10 +10,10 @@ Neon is the a project designed by Neon Itelligence.
 
 ## Features
 
-   * Video Playback with FFMPEG.
-   * File download manager.
-   * Everything is a WIP atm.
-   * To Do fix readme
+* Video Playback with FFMPEG.
+* File download manager.
+* Everything is a WIP atm.
+* To Do fix readme
 
 ## Installation
 
@@ -25,7 +25,7 @@ We are working on an automated updater
 
 This project uses a number of plugins
 
-   * Most of the features require installation of Neon Service 
+* Most of the features require installation of Neon Service 
 
 ## Development
 
@@ -50,8 +50,8 @@ cmake * * build ../build
 
 ## Todos
 
-   * Write test system
-   * Lot's of work
+* Write test system
+* Lot's of work
 
 ## License
 
@@ -59,12 +59,12 @@ MIT
 
 ## Free Software, Hell Yeah!
 
-   [ogre3d](https://github.com/ogreCave/ogre)
+* [ogre3d](https://github.com/ogreCave/ogre)
 
-   [ffmpeg](https://github.com/FFmpeg/ffmpeg)
+* [ffmpeg](https://github.com/FFmpeg/ffmpeg)
 
-   [libcurl](https://github.com/curl/curl)
+* [libcurl](https://github.com/curl/curl)
 
-   [nlohmanjson](https://github.com/nlohmann/json)
+* [nlohmanjson](https://github.com/nlohmann/json)
 
-   [simplej](https://github.com/eidheim/Simple-WebSocket-Server)
+* [simplej](https://github.com/eidheim/Simple-WebSocket-Server)
