@@ -8,7 +8,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5790aa30048346f99e3342b84a2fec8a)](https://app.codacy.com/app/kenkit/neon?utm_source=github.com&utm_medium=referral&utm_content=kenkit/neon&utm_campaign=Badge_Grade_Dashboard)
 
-Neon is the a project designed by Neon Itelligence.
+Neon is a project designed by Neon Itelligence.
 
 ## Features
 
@@ -41,7 +41,7 @@ To build Neon you must have cmake, the rest is almost automated
 ```
 mkdir build
 cd build
-cmake ../
+cmake ../ -DCLONE_REPO=TRUE
 ```
 
 Generating prebuilt zip archives for distribution:
@@ -67,6 +67,6 @@ MIT
 
    [libcurl](https://github.com/curl/curl)
 
-   [nlohmanjson](https://github.com/nlohmann/json)
+   [json](https://github.com/nlohmann/json)
 
-   [simplej](https://github.com/eidheim/Simple-WebSocket-Server)
+   [simplewebsocketserver](https://github.com/eidheim/Simple-WebSocket-Server)
