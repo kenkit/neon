@@ -2,7 +2,6 @@ extraction:
   cpp:
     prepare:
       packages:
-        - libssl-dev:amd64
         - libssl-dev:i386
     configure:
       command:

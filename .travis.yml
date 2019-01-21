@@ -6,7 +6,7 @@ compiler:
 
 before_script:
   - sudo apt-get install libboost-all-dev -y
-  - export CFLAGS="-m64 -static -fPIC" && export CXXFLAGS="-m64 -static -fPIC" && export LDFLAGS="-m64 -static -fPIC"
+  - export CFLAGS="-m64 -fPIC" && export CXXFLAGS="-m64 -fPIC" && export LDFLAGS="-m64 -fPIC"
   - mkdir _build
   - cd _build
   - cmake .. -DFORCE_OPERATIONS=FALSE -DCLONE_REPO=TRUE -DUSE_BOOST_THREAD=TRUE 
