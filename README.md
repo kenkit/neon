@@ -46,7 +46,7 @@ cmake ../
 
 Generating pre* built zip archives for distribution:
 ``` 
-cmake * * build ../build
+cmake --build ../build
 
 ```
 
