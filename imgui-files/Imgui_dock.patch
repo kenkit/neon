@@ -1,0 +1,29 @@
+diff --git a/imgui_dock.h b/imgui_dock.h
+index da92a34..93e1113 100644
+--- a/imgui_dock.h
++++ b/imgui_dock.h
+@@ -2,7 +2,24 @@
+ // modified from https://bitbucket.org/duangle/liminal/src/tip/src/liminal/imgui_dock.h
+ 
+ #pragma once
++inline int sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
++{
++    va_list ap;
++    va_start(ap, format);
++    int result = vsnprintf(buffer, sizeOfBuffer, format, ap);
++    va_end(ap);
++    return result;
++}
+ 
++template<size_t sizeOfBuffer>
++inline int sprintf_s(char (&buffer)[sizeOfBuffer], const char* format, ...)
++{
++    va_list ap;
++    va_start(ap, format);
++    int result = vsnprintf(buffer, sizeOfBuffer, format, ap);
++    va_end(ap);
++    return result;
++}
+ // Forward declarations
+ typedef int ImGuiWindowFlags;
+     
