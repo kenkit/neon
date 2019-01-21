@@ -59,12 +59,12 @@ MIT
 
 ## Free Software, Hell Yeah!
 
-* [ogre3d](https://github.com/ogreCave/ogre)
+   [ogre3d](https://github.com/ogreCave/ogre)
 
-* [ffmpeg](https://github.com/FFmpeg/ffmpeg)
+   [ffmpeg](https://github.com/FFmpeg/ffmpeg)
 
-* [libcurl](https://github.com/curl/curl)
+   [libcurl](https://github.com/curl/curl)
 
-* [nlohmanjson](https://github.com/nlohmann/json)
+   [nlohmanjson](https://github.com/nlohmann/json)
 
-* [simplej](https://github.com/eidheim/Simple-WebSocket-Server)
+   [simplej](https://github.com/eidheim/Simple-WebSocket-Server)
