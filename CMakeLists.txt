@@ -357,7 +357,7 @@ else()
         endif()
         message("Genarating sources using:${CMAKE_GENERATOR} ")
         execute_process(
-                COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type2}.${lib_ext}  
+                COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type2}.${lib_ext} -DOGRE_STATIC=TRUE -DOGRE_STATIC_LIB=TRUE
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
             )
             message("Building ogre")
