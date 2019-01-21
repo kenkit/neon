@@ -2,7 +2,8 @@ extraction:
   cpp:
     prepare:
       packages:
-        - libssl-dev
+        - libssl-dev:amd64
+        - libssl-dev:i386
     configure:
       command:
         - export CFLAGS="-m64 -fPIC" && export CXXFLAGS="-m64 -fPIC" && export LDFLAGS="-m64 -fPIC"

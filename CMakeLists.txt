@@ -494,8 +494,7 @@ include_directories(${OPEN_AL}/include)
 
 
 set(TOTAL_INCLUDES
-#${OGRE_FFMPEG}/example
-#${OGRE_FFMPEG}/include
+${OPENSSL_INCLUDE_DIR}/
 ${SDL2_INCLUDE_DIRS}
 ${CMAKE_SOURCE_DIR}/ogre-imgui
 ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/
@@ -510,7 +509,6 @@ ${OGRE_INCLUDE_DIRS}
 ${OGRE_INCLUDE_DIRS}/Bites
 ${OGRE_INCLUDE_DIRS}/RTShaderSystem
 ${CRYPTOPP} 
-${OPENSSL_INCLUDE_DIR}
 ${CRYPTOPP}/cryptopp 
 ${WSS_SOURCE_DIR} 
 ${RAPID_XML}
