@@ -9,6 +9,6 @@ before_script:
   - export CFLAGS="-m64 -static -fPIC" && export CXXFLAGS="-m64 -static -fPIC" && export LDFLAGS="-m64 -static -fPIC"
   - mkdir _build
   - cd _build
-  - cmake .. -DFORCE_OPERATIONS=FALSE -DUSE_BOOST_THREAD=TRUE 
+  - cmake .. -DFORCE_OPERATIONS=FALSE -DCLONE_REPO=TRUE -DUSE_BOOST_THREAD=TRUE 
 
 script: cd _build && make 
