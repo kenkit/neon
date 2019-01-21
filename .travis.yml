@@ -5,6 +5,7 @@ compiler:
   - clang
 
 before_script:
+  - sudo apt-get install libboost-all-dev -y
   - export CFLAGS="-m64 -static -fPIC" && export CXXFLAGS="-m64 -static -fPIC" && export LDFLAGS="-m64 -static -fPIC"
   - mkdir _build
   - cd _build
