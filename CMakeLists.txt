@@ -612,10 +612,12 @@ endforeach() ]]
             execute_process(
             COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imguiDock/imgui_dock.h ${CMAKE_SOURCE_DIR}/ogre-imgui/imgui/addons/imguidock/
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})       
-
+        if(NOT WIN32)
+        message("Applying sprintf patch ")
             execute_process(
                 COMMAND ${GIT_EXECUTABLE} apply  ${CMAKE_SOURCE_DIR}/imgui-files/Imgui_dock.patch
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/imguiDock/)  
+        endif()
 
         add_subdirectory(${CMAKE_SOURCE_DIR}/ogre-imgui OgreImgui) 
         

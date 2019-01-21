@@ -1,11 +1,13 @@
 diff --git a/imgui_dock.h b/imgui_dock.h
-index da92a34..93e1113 100644
+index da92a34..227ba4a 100644
 --- a/imgui_dock.h
 +++ b/imgui_dock.h
-@@ -2,7 +2,24 @@
- // modified from https://bitbucket.org/duangle/liminal/src/tip/src/liminal/imgui_dock.h
- 
+@@ -4,6 +4,27 @@
  #pragma once
+ 
+ // Forward declarations
++#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
++#else
 +inline int sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
 +{
 +    va_list ap;
@@ -14,7 +16,7 @@ index da92a34..93e1113 100644
 +    va_end(ap);
 +    return result;
 +}
- 
++
 +template<size_t sizeOfBuffer>
 +inline int sprintf_s(char (&buffer)[sizeOfBuffer], const char* format, ...)
 +{
@@ -24,6 +26,7 @@ index da92a34..93e1113 100644
 +    va_end(ap);
 +    return result;
 +}
- // Forward declarations
++#endif
  typedef int ImGuiWindowFlags;
      
+ typedef enum ImGuiDockSlot {
