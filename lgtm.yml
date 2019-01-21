@@ -1,5 +1,12 @@
 extraction:
   cpp:
+      prepare:
+      # Most Debian/Ubuntu package dependencies 
+      # are automatically detected, but this one
+      # is not. The team at lgtm.com are looking
+      # into it.
+      packages:
+        - libssl-dev
     configure:
       command:
         - export CFLAGS=-m64 && export CXXFLAGS=-m64 && export LDFLAGS=-m64
