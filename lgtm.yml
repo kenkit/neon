@@ -1,15 +1,15 @@
 extraction:
   cpp:
-      prepare:
-        packages:
-          - libssl-dev
-      configure:
-        command:
-          - export CFLAGS=-m64 && export CXXFLAGS=-m64 && export LDFLAGS=-m64
-          - mkdir _build
-          - cd _build
-          - cmake .. -DFORCE_OPERATIONS=TRUE -DUSE_BOOST_THREAD=TRUE 
-      index:
-          build_command:
-              - cd _build
-              - make
+    prepare:
+      packages:
+        - libssl-dev
+    configure:
+      command:
+        - export CFLAGS=-m64 && export CXXFLAGS=-m64 && export LDFLAGS=-m64
+        - mkdir _build
+        - cd _build
+        - cmake .. -DFORCE_OPERATIONS=TRUE -DUSE_BOOST_THREAD=TRUE 
+    index:
+      build_command:
+        - cd _build
+        - make
