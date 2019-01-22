@@ -666,7 +666,7 @@ endif()
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
-        target_link_libraries(cloud_commander_ui ffplay libcef_dll_wrapper)
+        target_link_libraries(cloud_commander_ui libcef_dll_wrapper)
         if(WIN32)
            target_link_libraries(cloud_commander_ui libcef_lib   ${CEF_STANDARD_LIBS})
         else()
@@ -693,19 +693,21 @@ endif()
         )
    ]]      
 if(WIN32)
-    target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
-
+    target_link_libraries(cloud_commander_ui  OgreImgui ffplay  ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
     target_link_libraries(ffplay
-    ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${SDL2_LIBRARIES}
+    ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${SDL2_LIBRARIES}  ${FF_LIBS}
+    winmm)
+    target_link_libraries(ffmpeg_ffplay   ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} 
+    ${SDL2_LIBRARIES}  ${FF_LIBS} 
     winmm)
 else()
     target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES}  ${FF_LIBS})
-
+    target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES} ${FF_LIBS})
     target_link_libraries(ffplay ${FF_LIBS}
     ${SDL2_LIBRARIES}
     )
 endif()
-target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES} ${FF_LIBS})
+
 
 
 if (WIN32)
