@@ -1167,6 +1167,11 @@ void ImguiExample::setup() {
   media_file.file_url_name = "http://uk6.internet-radio.com:8424/";
   media_file.name = "UK-AT Radio";
   selected[1].play_list.push_back(media_file);
+
+  media_file.file_url_name = "http://192.99.8.170:6110/stream";
+  media_file.name = "ABLAST";
+  selected[1].play_list.push_back(media_file);
+
   play_list_lock.unlock();
   start_time = boost::posix_time::microsec_clock::local_time();
   /// Ogre::Entity* ent = scnMgr->createEntity("Sinbad.mesh");
