@@ -1,6 +1,6 @@
 # Neon Project
 
-[![GitHub release](https://img.shields.io/github/release/kenkit/neon.svg)](https://github.com/OGRECave/ogre/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/kenkit/neon.svg)](https://github.com/kenkit/neon/releases/latest)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/dapr240j1ignrsrl?svg=true)](https://ci.appveyor.com/project/kenkit/neon)
 
