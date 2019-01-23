@@ -24,3 +24,5 @@ ffmpeg
 *.gz
 *.tar
 FFmpeg
+json_release.json
+NeonTech.zip.tmp
