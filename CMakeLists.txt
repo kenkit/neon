@@ -49,7 +49,7 @@ else()
     set(lib_ext a)
     set(library_package so)
 endif()
-message("XYXYXYXYXYX ${CMAKE_BUILD_TYPE} mode XYXYXYXYX")
+message("[[[[[[[ ${CMAKE_BUILD_TYPE} mode ]]]]]]]")
 
 set(CRYPTOPP $ENV{CRYPTOPP})                    #internalize
 set (OPENSSL_ROOT_DIR $ENV{OPENSSL_ROOT_DIR})   #internalize
@@ -235,70 +235,7 @@ else ()
         set(Downloaded_JS TRUE)
     endif()
 endif()
-
-if (WIN32)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/ogre" AND NOT FORCE_OPERATIONS)
-    else()
-        execute_process(
-            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            )
-    endif()
-    if(EXISTS "${OGRE_HOME}/current_ogre")
-        file(READ "${OGRE_HOME}/current_ogre" current_version)
-    else()
-        set(current_version 0)
-    endif()
-    if(Downloaded_JS)
-        file(DOWNLOAD "https://api.github.com/repos/kenkit/ogre/releases/latest" "${OGRE_HOME}/json_release.json" SHOW_PROGRESS STATUS status)
-        file(READ "${OGRE_HOME}/json_release.json" JSON_OUTPUT)
-        sbeParseJson(parsed_json JSON_OUTPUT)
-        set(latest_version ${parsed_json.tag_name})
-        set(download_url ${parsed_json.assets_0.browser_download_url}) 
-        string(COMPARE EQUAL "${latest_version}" "" result)
-        if(result)
-            message("No network??")  
-            set(latest_version ${current_version})
-        endif()
-        message("LATEST VERSION OF OGRE:REPO KENIT/OGRE ${latest_version} CURRENTLY INSTALLED ${current_version}")
-        string(REPLACE "." "" current_version ${current_version})
-        string(REPLACE "." ""  latest_version_2 ${latest_version})
-        if(NOT SKIP_DOWNLOADS)
-            if((current_version  LESS  latest_version_2 ) OR (current_version LESS_EQUAL "0" ))
-                message("DOWNLOADING ${Ogre_zip} FROM KENKITS REPO:${download_url}" )
-                file(DOWNLOAD ${download_url}  ${Ogre_zip} SHOW_PROGRESS STATUS status)
-                list(GET status 0 status_code)
-                list(GET status 1 status_string)
-                if(NOT status_code EQUAL 0)
-                    message(WARN "error: downloading failed
-                    status_code: ${status_code}
-                    status_string: ${status_string}")
-                else()
-                    message("Download succeeded")
-                    message("Removing old ogre in:${OGRE_HOME} ")
-                    if(EXISTS ${OGRE_HOME}/build/sdk)
-                        FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
-                        file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
-                        execute_process(
-                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
-                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                        )
-                        else()
-                    execute_process(
-                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    )
-                    endif()
-                endif()     
-            else ()
-                message("YOU HAVE THE LATEST OGRE INSTALLED")
-            endif()
-        else ()
-            message("<<<<<<<<<<<<<<<>-SKIPPING DOWNLOADS-<><<<<<<<<<<<<<<<")
-        endif()
-    endif()
-else()
-    if(CLONE_REPO)
+if(CLONE_REPO)
         if(EXISTS "${CMAKE_SOURCE_DIR}/ogre" AND NOT FORCE_OPERATIONS)
             message("Found ogre in ${CMAKE_SOURCE_DIR}/ogre")
             message("Pulling Ogre from ogrecave")
@@ -312,7 +249,7 @@ else()
             COMMAND ${GIT_EXECUTABLE} clone https://github.com/OGRECave/ogre.git
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
         endif()
-        message("Building ogre for linux")
+        message("[[[[[[[Building ogre from sources]]]]]]]")
         if(EXISTS "${CMAKE_SOURCE_DIR}/ogre/build" AND NOT FORCE_OPERATIONS)
             message("Directory ${CMAKE_SOURCE_DIR}/ogre/build exists not creating ")
         else()
@@ -331,42 +268,51 @@ else()
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/
                 )
         endif()
-        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL" AND NOT FORCE_OPERATIONS)
-            message("Found SDL ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL")
-            message("Pulling SDL")
-            execute_process(
-                COMMAND ${HG_EXECUTABLE} pull
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
-        else()
-            message("no sdl found")
-            message("cloning a fresh....")
-            execute_process(
-            COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies)
-        endif()
-        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL" AND NOT FORCE_OPERATIONS)
-            message("Creating build directory:${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build")
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL
-                )
-            message("Building sdl2")
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}  -DCMAKE_EXE_LINKER_FLAGS=-fPIC
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} --build build
+        if(NOT WIN32)
+            if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL" AND NOT FORCE_OPERATIONS)
+                message("Found SDL ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL")
+                message("Pulling SDL")
+                execute_process(
+                    COMMAND ${HG_EXECUTABLE} pull
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
-            execute_process(
-                COMMAND make install
+            else()
+                message("no sdl found")
+                message("cloning a fresh....")
+                execute_process(
+                COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies)
+            endif()
+            if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL" AND NOT FORCE_OPERATIONS)
+                message("Creating build directory:${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build")
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL
+                    )
+                message("Building sdl2")
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}  -DCMAKE_EXE_LINKER_FLAGS=-fPIC
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
-            set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/cmake/SDL2)
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --build build
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
+                execute_process(
+                    COMMAND make install
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL/build)
+                set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/cmake/SDL2)
+            endif()
         endif()
         message("Genarating sources using:${CMAKE_GENERATOR} ")
-        execute_process(
+        if(WIN32)
+            execute_process(
+                    COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type2}.${lib_ext} -DOGRE_STATIC=TRUE -DOGRE_STATIC_LIB=TRUE
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
+                )
+        else()
+            execute_process(
                 COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/ogre/sdk -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DSDL2_LIBRARY=${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/lib/libSDL2${build_type2}.${lib_ext} -DOGRE_STATIC=TRUE -DOGRE_STATIC_LIB=TRUE
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
             )
+        endif()
             message("Building ogre")
         execute_process(
                 COMMAND ${CMAKE_COMMAND} --build  build
@@ -377,6 +323,68 @@ else()
                 COMMAND make install
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build
             )
+else()
+    if(WIN32)
+        if(EXISTS "${CMAKE_SOURCE_DIR}/ogre" AND NOT FORCE_OPERATIONS)
+        else()
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
+        endif()
+        if(EXISTS "${OGRE_HOME}/current_ogre")
+            file(READ "${OGRE_HOME}/current_ogre" current_version)
+        else()
+            set(current_version 0)
+        endif()
+        if(Downloaded_JS)
+            file(DOWNLOAD "https://api.github.com/repos/kenkit/ogre/releases/latest" "${OGRE_HOME}/json_release.json" SHOW_PROGRESS STATUS status)
+            file(READ "${OGRE_HOME}/json_release.json" JSON_OUTPUT)
+            sbeParseJson(parsed_json JSON_OUTPUT)
+            set(latest_version ${parsed_json.tag_name})
+            set(download_url ${parsed_json.assets_0.browser_download_url}) 
+            string(COMPARE EQUAL "${latest_version}" "" result)
+            if(result)
+                message("No network??")  
+                set(latest_version ${current_version})
+            endif()
+            message("LATEST VERSION OF OGRE:REPO KENIT/OGRE ${latest_version} CURRENTLY INSTALLED ${current_version}")
+            string(REPLACE "." "" current_version ${current_version})
+            string(REPLACE "." ""  latest_version_2 ${latest_version})
+            if(NOT SKIP_DOWNLOADS)
+                if((current_version  LESS  latest_version_2 ) OR (current_version LESS_EQUAL "0" ))
+                    message("DOWNLOADING ${Ogre_zip} FROM KENKITS REPO:${download_url}" )
+                    file(DOWNLOAD ${download_url}  ${Ogre_zip} SHOW_PROGRESS STATUS status)
+                    list(GET status 0 status_code)
+                    list(GET status 1 status_string)
+                    if(NOT status_code EQUAL 0)
+                        message(WARN "error: downloading failed
+                        status_code: ${status_code}
+                        status_string: ${status_string}")
+                    else()
+                        message("Download succeeded")
+                        message("Removing old ogre in:${OGRE_HOME} ")
+                        if(EXISTS ${OGRE_HOME}/build/sdk)
+                            FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
+                            file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
+                            execute_process(
+                                COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
+                                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                            )
+                            else()
+                        execute_process(
+                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
+                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        )
+                        endif()
+                    endif()     
+                else ()
+                    message("YOU HAVE THE LATEST OGRE INSTALLED")
+                endif()
+            else ()
+                message("<<<<<<<<<<<<<<<>-SKIPPING DOWNLOADS-<><<<<<<<<<<<<<<<")
+            endif()
+        endif()
     else()
         if(EXISTS "${CMAKE_SOURCE_DIR}/ogre" AND NOT FORCE_OPERATIONS)
             message("Not downloading ogre zip again")
@@ -420,20 +428,20 @@ find_package(SDL2 REQUIRED)
 #string(REPLACE "\\" "/" FF_OGRE ${FF_OGRE})
 #set(OPEN_AL_LIB ${OPEN_AL}/build/Debug/OpenAL32.lib)
 file(GLOB FF_LIBS ${FFMPEG}/Install/lib/*.${lib_ext})
-message("FF OGRE:${FF_OGRE}")
+message("[[[[[[[ FF OGRE:${FF_OGRE} ]]]]]]]")
 
 #add_library(ffplay  ${SDL_AL} )
 if(WIN32)
 add_custom_target(
     config_h
-    COMMENT "FFPLAY:Coping ${FFMPEG}/config.h to ${FFMPEG}/config_ff.h"
+    #COMMENT "FFPLAY:Coping ${FFMPEG}/config.h to ${FFMPEG}/config_ff.h"
     COMMAND ${CMAKE_COMMAND} -E
     copy_if_different  ${FFMPEG}/config.h ${FFMPEG}/config_ff.h
     )
 else()
     add_custom_target(
         config_h
-        COMMENT "FFPLAY:Coping ${FFMPEG}/Install/config.h to ${FFMPEG}/Install/include/config_ff.h"
+        #COMMENT "FFPLAY:Coping ${FFMPEG}/Install/config.h to ${FFMPEG}/Install/include/config_ff.h"
         COMMAND ${CMAKE_COMMAND} -E
         copy_if_different  ${FFMPEG}/config.h ${FFMPEG}/Install/include/config_ff.h
         )
@@ -474,20 +482,20 @@ if(USE_BOOST_THREAD)
     else()
         target_compile_definitions(neon PUBLIC -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
     endif()
-    message("|||||||||||| USING BOOST:THREAD ||||||||||||")
+    message("[[[[[[[ USING BOOST:THREAD ]]]]]]]")
 else()
     if(WIN32)
         target_compile_definitions(neon PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
     else()
         target_compile_definitions(neon PUBLIC -DCONSOLE_APP=1)
     endif()
-    message("|||||||||||| USING STD:THREAD ||||||||||||")
+    message("[[[[[[[ USING STD:THREAD ]]]]]]]")
 endif()
 if(ORIG_FFPLAY)
-    message("Building original ffplay")
+    message("[[[[[[[ Building original ffplay ]]]]]]]")
     set(FFPLAY_SOURCE ${FFMPEG}/doc/examples/metadata.c )
 else()
-    message("Building projects ffplay")
+    message("[[[[[[[ Building projects ffplay ]]]]]]]")
     set(FFPLAY_SOURCE ${CMAKE_SOURCE_DIR}/ffplay/ffplay.c ${CMAKE_SOURCE_DIR}/ffplay/cmdutils.c) 
 endif()
 add_executable(ffmpeg_ffplay ${FFPLAY_SOURCE} )
@@ -734,14 +742,14 @@ PRINT_CEF_CONFIG()
 if (WIN32)
     add_custom_target(
         package_project  ALL  
-            COMMENT "packaging project into zip file"
+            COMMENT "packaging project into zip file with:${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
             COMMAND ${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
 else()
     add_custom_target(
             package_project  ALL  
-                COMMENT "packaging project into zip file"
+                COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
             COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
