@@ -215,9 +215,9 @@ find_package(CEF REQUIRED)
 #----------------------------------------------------------------------
 
 if(WIN32)
-    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/build/sdk/CMake)
-    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/build/sdk)
-    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/build/sdk/ogredeps)
+    set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/CMake)
+    set(OGRE_HOME ${CMAKE_SOURCE_DIR}/ogre/build/sdk)
+    set(OGRE_DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/ogre/build/sdk/ogredeps)
     set(SDL2_DIR ${OGRE_DEPENDENCIES_DIR}/cmake)
 else()
     set(OGRE_DIR ${CMAKE_SOURCE_DIR}/ogre/sdk/lib/OGRE/cmake)
@@ -237,6 +237,13 @@ else ()
 endif()
 
 if (WIN32)
+    if(EXISTS "${CMAKE_SOURCE_DIR}/ogre" AND NOT FORCE_OPERATIONS)
+    else()
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_SOURCE_DIR}/ogre
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            )
+    endif()
     if(EXISTS "${OGRE_HOME}/current_ogre")
         file(READ "${OGRE_HOME}/current_ogre" current_version)
     else()
@@ -273,12 +280,12 @@ if (WIN32)
                         FILE(REMOVE_RECURSE ${OGRE_HOME}/build)
                         file(WRITE "${OGRE_HOME}/current_ogre" ${latest_version})
                         execute_process(
-                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r ${Ogre_zip}
+                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
                             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         )
                         else()
                     execute_process(
-                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r ${Ogre_zip}
+                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r -oogre ${Ogre_zip}
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
                     endif()
@@ -446,33 +453,33 @@ ${CMAKE_SOURCE_DIR}/gui-interface/*.cpp
 ) 
 if(NOT CONSOLE_APP)
 if(WIN32)
-    add_executable(cloud_commander_ui  WIN32  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
+    add_executable(neon  WIN32  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
 else()
-    add_executable(cloud_commander_ui   cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
+    add_executable(neon   cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} ${CMAKE_SOURCE_DIR}/imgui-files/boost_fix.cpp )
 endif()
     message("BUILDING WIN32 GUI APPLICATION")
 else()
-add_executable(cloud_commander_ui  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} #[[${CMAKE_SOURCE_DIR}/utilities/utilities.cpp 
+add_executable(neon  cloud_commander_ui.cpp ${CMAKE_SOURCE_DIR}/resource.rc ${other_deps} #[[${CMAKE_SOURCE_DIR}/utilities/utilities.cpp 
 ${CMAKE_SOURCE_DIR}/web_sockets/web_socket.cpp 
 ${CMAKE_SOURCE_DIR}/gui-interface/gui_interface.cpp]] )
 message("BUILDING CONSOLE APPLICATION")
 endif()
-#SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
+#SET_EXECUTABLE_TARGET_PROPERTIES(neon)
 
-#set_target_properties(cloud_commander_ui PROPERTIES COMPILE_DEFINITIONS "_WIN32_WINNT=${ver}")
+#set_target_properties(neon PROPERTIES COMPILE_DEFINITIONS "_WIN32_WINNT=${ver}")
 if(USE_BOOST_THREAD)
-    #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_DEFINITIONS "CONSOLE_APP=1 USE_BOOST_THREAD=1")
+    #set_target_properties(neon PROPERTIES COMPILE_DEFINITIONS "CONSOLE_APP=1 USE_BOOST_THREAD=1")
    if(WIN32)
-        target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
+        target_compile_definitions(neon PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
     else()
-        target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
+        target_compile_definitions(neon PUBLIC -DCONSOLE_APP=1 -DUSE_BOOST_THREAD=1)
     endif()
     message("|||||||||||| USING BOOST:THREAD ||||||||||||")
 else()
     if(WIN32)
-        target_compile_definitions(cloud_commander_ui PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
+        target_compile_definitions(neon PUBLIC -D_WIN32_WINNT=0x0A00 -DCONSOLE_APP=1)
     else()
-        target_compile_definitions(cloud_commander_ui PUBLIC -DCONSOLE_APP=1)
+        target_compile_definitions(neon PUBLIC -DCONSOLE_APP=1)
     endif()
     message("|||||||||||| USING STD:THREAD ||||||||||||")
 endif()
@@ -537,13 +544,13 @@ file(WRITE "${CMAKE_SOURCE_DIR}/.vscode/c_cpp_properties.json" "{\n\"configurati
 if (WIN32)
 file(GLOB CFGFiles ${CMAKE_SOURCE_DIR}/cfg/*.cfg ${FFMPEG}/Install/bin/*.${library_package} )
      foreach(CFGFile ${CFGFiles})
-         add_custom_command(TARGET cloud_commander_ui POST_BUILD
+         add_custom_command(TARGET neon POST_BUILD
          COMMAND ${CMAKE_COMMAND} -E
-         copy_if_different  ${CFGFile} $<TARGET_FILE_DIR:cloud_commander_ui>
+         copy_if_different  ${CFGFile} $<TARGET_FILE_DIR:neon>
                  COMMENT "copying ${CFGFile}\n"
          )
 endforeach()  
-#[[add_custom_command(TARGET cloud_commander_ui PRE_BUILD
+#[[add_custom_command(TARGET neon PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/Cloud_Commander_UI
 COMMAND "${GIT_EXECUTABLE}" log -10  > Cloud_Commander_UI/Latest_Version_Info.txt
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -564,10 +571,10 @@ ${OGRE_HOME}/bin/SDL2.${library_package}
 ${OGRE_HOME}/bin/zlib.${library_package}
 )
 foreach(DLLFile ${DLLFiles})
-         add_custom_command(TARGET cloud_commander_ui POST_BUILD
+         add_custom_command(TARGET neon POST_BUILD
          COMMENT ">>>>>>>>>>>>>>>>>>copying ${DLLFile}<<<<<<<<<<<<<<<<<<<<<<<<"
          COMMAND ${CMAKE_COMMAND} -E
-         copy_if_different  ${DLLFile} $<TARGET_FILE_DIR:cloud_commander_ui> 
+         copy_if_different  ${DLLFile} $<TARGET_FILE_DIR:neon> 
          )
 endforeach()
 endif() 
@@ -621,12 +628,12 @@ endforeach() ]]
         
         #target_compile_definitions(OgreImgui  PRIVATE  -D"snprintf sprintf_s")
 if(WIN32)
-        SET_EXECUTABLE_TARGET_PROPERTIES(cloud_commander_ui)
+        SET_EXECUTABLE_TARGET_PROPERTIES(neon)
         SET_EXECUTABLE_TARGET_PROPERTIES(OgreImgui)
         SET_EXECUTABLE_TARGET_PROPERTIES(Example)
 else()
             #target_compile_options(OgreImgui PRIVATE "-Wformat-nonliteral")
-            #target_compile_options(cloud_commander_ui PRIVATE  -Wno-format-nonliteral)
+            #target_compile_options(neon PRIVATE  -Wno-format-nonliteral)
             #target_compile_options(Example  PRIVATE "-Wformat-nonliteral")
             #set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/ogre-imgui/imgui/imgui.h PROPERTIES COMPILE_FLAGS -Wno-format-nonliteral)
             #add_compile_options(-Wformat-nonliteral)
@@ -657,31 +664,31 @@ endif()
 
 
     add_subdirectory(${CEF_ROOT}/libcef_dll libcef_dll_wrapper)
-    add_dependencies(cloud_commander_ui  ffplay OgreImgui AlwaysCheckGit libcef_dll_wrapper)   
+    add_dependencies(neon  ffplay OgreImgui AlwaysCheckGit libcef_dll_wrapper)   
     ADD_LOGICAL_TARGET(libcef_lib ${CEF_LIB_DEBUG} ${CEF_LIB_RELEASE})
     if(WIN32)
         set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
         set_target_properties(ffplay PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
     endif()
-    #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    #set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    #set_target_properties(neon PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    #set_target_properties(neon PROPERTIES COMPILE_FLAGS  "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
-        target_link_libraries(cloud_commander_ui libcef_dll_wrapper)
+        target_link_libraries(neon libcef_dll_wrapper)
         if(WIN32)
-           target_link_libraries(cloud_commander_ui libcef_lib   ${CEF_STANDARD_LIBS})
+           target_link_libraries(neon libcef_lib   ${CEF_STANDARD_LIBS})
         else()
-        set_target_properties(cloud_commander_ui PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-        target_link_libraries(cloud_commander_ui libcef_lib   ${CEF_STANDARD_LIBS})
+        set_target_properties(neon PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+        target_link_libraries(neon libcef_lib   ${CEF_STANDARD_LIBS})
         endif()
         if( MSVC )
             #ADD_DEFINITIONS("/EHsc")
-           #set_target_properties( cloud_commander_ui PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
+           #set_target_properties( neon PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
             #set_target_properties( ffplay PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCPMT" )
 	    endif()
         #[[if(USE_SANDBOX)
         # Logical target used to link the cef_sandbox library.
         ADD_LOGICAL_TARGET("cef_sandbox_lib" "${CEF_SANDBOX_LIB_DEBUG}" "${CEF_SANDBOX_LIB_RELEASE}")
-        target_link_libraries(cloud_commander_ui cef_sandbox_lib ${CEF_SANDBOX_STANDARD_LIBS} )
+        target_link_libraries(neon cef_sandbox_lib ${CEF_SANDBOX_STANDARD_LIBS} )
       endif()]]
         set_target_properties(ffplay PROPERTIES ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_SOURCE_DIR}/lib)
 #[[
@@ -693,7 +700,7 @@ endif()
         )
    ]]      
 if(WIN32)
-    target_link_libraries(cloud_commander_ui  OgreImgui ffplay  ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
+    target_link_libraries(neon  OgreImgui ffplay  ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ws2_32 wsock32 ${Boost_LIBRARIES}  ${FF_LIBS} winmm)
     target_link_libraries(ffplay
     ${OGRE_DEPENDENCIES_DIR}/lib/SDL2.${lib_ext} ${OGRE_DEPENDENCIES_DIR}/lib/SDL2main.${lib_ext} ${SDL2_LIBRARIES}  ${FF_LIBS}
     winmm)
@@ -701,7 +708,7 @@ if(WIN32)
     ${SDL2_LIBRARIES}  ${FF_LIBS} 
     winmm)
 else()
-    target_link_libraries(cloud_commander_ui  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES}  ${FF_LIBS})
+    target_link_libraries(neon  OgreImgui ${SDL2_LIBRARIES} ${OGRE_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES}  ${FF_LIBS})
     target_link_libraries(ffmpeg_ffplay ${SDL2_LIBRARIES} ${FF_LIBS})
     target_link_libraries(ffplay ${FF_LIBS}
     ${SDL2_LIBRARIES}
@@ -713,15 +720,15 @@ endif()
 if (WIN32)
 file(GLOB rtshaders ${OGRE_HOME}/media/RTShaderLib/*.)
 foreach(shader ${rtshaders})
-add_custom_command(TARGET cloud_commander_ui POST_BUILD
+add_custom_command(TARGET neon POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E
-copy_if_different  ${shader} $<TARGET_FILE_DIR:cloud_commander_ui>/RTShaderLib
+copy_if_different  ${shader} $<TARGET_FILE_DIR:neon>/RTShaderLib
         COMMENT "copying ${shader}/RTShaderLib\n"
 )
 endforeach()  
 endif()
-COPY_FILES(cloud_commander_ui "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:cloud_commander_ui>)
-COPY_FILES(cloud_commander_ui "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:cloud_commander_ui>)
+COPY_FILES(neon "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:neon>)
+COPY_FILES(neon "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:neon>)
 PRINT_CEF_CONFIG()
 
 if (WIN32)
@@ -740,4 +747,4 @@ else()
             )
 endif()
 
-add_dependencies(package_project cloud_commander_ui)
+add_dependencies(package_project neon)

@@ -59,7 +59,7 @@
 class ImguiExample : public OgreBites::ApplicationContext,
                      public OgreBites::InputListener {
 public:
-  ImguiExample() : OgreBites::ApplicationContext("Cloud_Commander_UI") {}
+  ImguiExample() : OgreBites::ApplicationContext("Neon") {}
   #ifdef USE_BOOST_THREAD
     boost::thread *player;
   #else
