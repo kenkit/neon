@@ -9,9 +9,10 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 set(CEF_TARGET "neon")
 project(${CEF_TARGET})
+
+set(PRE_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/version.h.in")
+set(POST_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/include/version.h")
 include(${CMAKE_SOURCE_DIR}/git_watcher.cmake)
-set(PRE_CONFIGURE_FILE "version.h.in")
-set(POST_CONFIGURE_FILE "version.h")
 # specify which version you need
 # Set a default build type if none was specified
 macro(use_cxx11)
@@ -199,7 +200,7 @@ include_directories(
   # Executable target.
   add_subdirectory(${CEF_ROOT}/libcef_dll libcef_dll_wrapper)
 
-  add_executable(${CEF_TARGET} WIN32 ${CEFSIMPLE_SRCS})
+  add_executable(${CEF_TARGET} WIN32 ${CEFSIMPLE_SRCS} ${CMAKE_SOURCE_DIR}/resource.rc )
   add_dependencies(${CEF_TARGET} libcef_dll_wrapper AlwaysCheckGit )
   ADD_LOGICAL_TARGET(libcef_lib ${CEF_LIB_DEBUG} ${CEF_LIB_RELEASE})
   SET_EXECUTABLE_TARGET_PROPERTIES(${CEF_TARGET})
@@ -219,7 +220,7 @@ include_directories(
   COPY_FILES("${CEF_TARGET}" "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
   COPY_FILES("${CEF_TARGET}" "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
 
-  set(DLLFiles D:/Programming/bak/neon/ogre/build/Dependencies/bin/SDL2.dll)
+  set(DLLFiles ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2.dll)
   foreach(DLLFile ${DLLFiles})
            add_custom_command(TARGET ${CEF_TARGET} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E
@@ -230,19 +231,26 @@ include_directories(
   PRINT_CEF_CONFIG()
   
 if (WIN32)
-add_custom_target(
-    package_project  ALL  
-        COMMENT "packaging project into zip file with:${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
-        COMMAND ${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
-        )
-else()
-add_custom_target(
+
+    if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files (x86)/7-Zip/7z.exe")
+    elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
+    endif()
+    add_custom_target(
         package_project  ALL  
-            COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
-        COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
-        )
+            COMMENT "packaging project into zip file with:${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
+            COMMAND ${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+            )
+else()
+    SET (7ZIP_EXECUTABLE "7z")
+    add_custom_target(
+            package_project  ALL  
+                COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
+            COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+            )
 endif()
 
 add_dependencies(package_project ${CEF_TARGET})

@@ -12,7 +12,7 @@
 #include <include/wrapper/cef_helpers.h>
 
 #include "sdl_keyboard_utils.h"
-
+#include "version.h"
 class RenderHandler :
     public CefRenderHandler
 {
