@@ -162,22 +162,9 @@ else()
             COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
         else()
-            message("Downloading sdl.zip")
-            file(DOWNLOAD "https://hg.libsdl.org/SDL/archive/tip.zip" ${CMAKE_CURRENT_SOURCE_DIR}/sdl.zip SHOW_PROGRESS STATUS status)
-            list(GET status 0 status_code)
-            list(GET status 1 status_string)
-            if(NOT status_code EQUAL 0)
-                message(WARN "error: downloading failed
-                status_code: ${status_code}
-                status_string: ${status_string}")
-            else()
-                message("Download succeeded")
-                message("Extracting sdl.zip")
-                execute_process(
-                COMMAND ${CMAKE_COMMAND} -E tar xzf sdl.zip 
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                )
-            endif()  
+        execute_process(
+            COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
         endif()
 endif()
 
