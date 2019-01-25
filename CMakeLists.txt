@@ -9,7 +9,8 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 set(CEF_TARGET "neon")
 project(${CEF_TARGET})
-
+find_package(Hg)
+find_package(Git)
 set(PRE_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/version.h.in")
 set(POST_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/include/version.h")
 include(${CMAKE_SOURCE_DIR}/git_watcher.cmake)
@@ -129,10 +130,10 @@ endif()
 message("Setting CMAKE_MODULE_PATH TO :${CEF_ROOT}/cmake")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
 execute_process(
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/cef_macros.cmake  ${CEF_ROOT}/cmake/cef_macros.cmake 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/patch_files/cef_macros.cmake  ${CEF_ROOT}/cmake/cef_macros.cmake 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/imgui-files/cef_variables.cmake  ${CEF_ROOT}/cmake/cef_variables.cmake
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/patch_files/cef_variables.cmake  ${CEF_ROOT}/cmake/cef_variables.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(CEF REQUIRED)
 
@@ -142,21 +143,23 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL" AND NOT FORCE_OPERATIONS)
         message("Pulling SDL")
         execute_process(
             COMMAND ${HG_EXECUTABLE} pull
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies/SDL)
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
 else()
         message("no sdl found")
         message("cloning a fresh....")
         execute_process(
         COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ogre/build/Dependencies)
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
-    message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/
-        )
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL" AND NOT FORCE_OPERATIONS)
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
+        message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/
+            )
+    endif()
     message("Generating sdl2 sources")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
@@ -171,10 +174,14 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
             COMMAND make install
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/)
     else()
-    message("installing sdl2 to:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/")   
-        execute_process(
-            COMMAND ${CMAKE_COMMAND} --build build --target Install
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
+        message("generating sources") 
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build) 
+        message("building sdl2 from sources")   
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} --build build --target Install
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
     endif()
     if(WIN32)
         set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/cmake)
@@ -219,15 +226,15 @@ include_directories(
   # Copy binary and resource files to the target output directory.
   COPY_FILES("${CEF_TARGET}" "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
   COPY_FILES("${CEF_TARGET}" "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
-
-  set(DLLFiles ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2.dll)
+if(WIN32)
+  set(DLLFiles ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2${build_type2}.dll)
   foreach(DLLFile ${DLLFiles})
            add_custom_command(TARGET ${CEF_TARGET} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E
            copy_if_different  ${DLLFile}  $<TARGET_FILE_DIR:${CEF_TARGET}>
            )
   endforeach() 
-
+endif()
   PRINT_CEF_CONFIG()
   
 if (WIN32)
