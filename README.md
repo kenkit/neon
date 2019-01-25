@@ -10,10 +10,10 @@ Neon is a project designed by Neon Itelligence.
 
 ## Features
 
-  - Video Playback with FFMPEG.
-  - File download manager.
-  - Everything is a WIP atm.
-  - To Do fix readme
+-   Video Playback with FFMPEG.
+-   File download manager.
+-   Everything is a WIP atm.
+-   To Do fix readme
 
 ## Installation
 
@@ -25,7 +25,7 @@ We are working on an automated updater
 
 This project uses a number of plugins
 
-  - Most of the features require installation of Neon Service 
+-   Most of the features require installation of Neon Service 
 
 ## Development
 
@@ -36,22 +36,19 @@ Just create a pull request, we will be happy to integrate new features.
 ## Building for source
 
 To build Neon you must have cmake, the rest is almost automated
-```
-mkdir build
-cd build
-cmake ../ -DCLONE_REPO=TRUE
-```
+
+    mkdir build
+    cd build
+    cmake ../ -DCLONE_REPO=TRUE
 
 Generating prebuilt zip archives for distribution:
-``` 
-cmake --build ../build
 
-```
+    cmake --build ../build
 
 ## Todos
 
-  - Write Test system
-  - See HTML in the right
+-   Write Test system
+-   See HTML in the right
 
 ## License
 
