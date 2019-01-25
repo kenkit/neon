@@ -1,3 +1,10 @@
+path_classifiers:
+  test:
+    - "*/*/src*.cpp"
+    - "*/*/include*.cpp"
+    - "*/*/patch_files*.cpp"
+queries:
+  - exclude: cpp/use-of-goto  
 extraction:
   cpp:
     prepare:
