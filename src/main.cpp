@@ -274,10 +274,11 @@ int main(int argc, char * argv[])
             CefRefPtr<CefBrowser> browser;
             CefRefPtr<BrowserClient> browserClient;
              CefWindowHandle windowHandle;
+            /*
              SDL_SysWMinfo windowInfo;
             SDL_VERSION(&windowInfo.version);
             SDL_GetWindowWMInfo(window, &windowInfo);
-            windowHandle = windowInfo.info.win.window;
+            windowHandle = windowInfo.info.win.window;*/
             {
                 CefWindowInfo window_info;
                 CefBrowserSettings browserSettings;

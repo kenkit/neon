@@ -250,16 +250,16 @@ endif()
 if(WIN32)
     add_custom_target(
         package_project  ALL  
-            COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
-        COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
-        )
-else()
-    add_custom_target(
-        package_project  ALL  
             COMMENT "packaging project into zip file with:${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
             COMMAND ${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
+else()
+    add_custom_target(
+        package_project  ALL  
+            COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
+        COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+        )
 endif()
 add_dependencies(package_project ${CEF_TARGET})
