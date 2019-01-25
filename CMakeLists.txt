@@ -14,6 +14,17 @@ find_package(Git)
 set(PRE_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/version.h.in")
 set(POST_CONFIGURE_FILE "${CMAKE_SOURCE_DIR}/include/version.h")
 include(${CMAKE_SOURCE_DIR}/git_watcher.cmake)
+if (WIN32)
+    if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files (x86)/7-Zip/7z.exe")
+    elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
+        SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
+    endif()
+else()
+    SET (7ZIP_EXECUTABLE "7z")
+endif()
+
+
 # specify which version you need
 # Set a default build type if none was specified
 macro(use_cxx11)
@@ -235,27 +246,19 @@ if(WIN32)
 endif()
   PRINT_CEF_CONFIG()
   
-if (WIN32)
-
-    if(EXISTS "C:/Program Files (x86)/7-Zip/7z.exe")
-        SET (7ZIP_EXECUTABLE "C:/Program Files (x86)/7-Zip/7z.exe")
-    elseif(EXISTS "C:/Program Files/7-Zip/7z.exe")
-        SET (7ZIP_EXECUTABLE "C:/Program Files/7-Zip/7z.exe")
-    endif()
+add_dependencies(package_project ${CEF_TARGET})
+if(WIN32)
+    add_custom_target(
+        package_project  ALL  
+            COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
+        COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+        )
+else()
     add_custom_target(
         package_project  ALL  
             COMMENT "packaging project into zip file with:${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
             COMMAND ${7ZIP_EXECUTABLE} a -bb3  ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
-else()
-    SET (7ZIP_EXECUTABLE "7z")
-    add_custom_target(
-            package_project  ALL  
-                COMMENT "packaging project into zip file with:tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *"
-            COMMAND tar -czvf ${CMAKE_CURRENT_SOURCE_DIR}/NeonTech.zip *
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
-            )
 endif()
-
-add_dependencies(package_project ${CEF_TARGET})
