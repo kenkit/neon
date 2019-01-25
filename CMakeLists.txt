@@ -111,7 +111,7 @@ else()
             message("Download succeeded")
         endif()  
     endif()
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz" AND NOT FORCE_OPERATIONS)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz" OR FORCE_OPERATIONS)
         if (WIN32)
                 message("Extracting cef_binary.tar.bz")
                 execute_process(
