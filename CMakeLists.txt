@@ -157,10 +157,23 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL" AND NOT FORCE_OPERATIONS)
 else()
         message("no sdl found")
         message("cloning a fresh....")
-        if(WIN32)
-            execute_process(
-            COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+        if(DOWNLOAD_SDL2)
+            set(SLD_DEP_LINK "https://github.com/kenkit/Cloud_Commander_UI/blob/master/sdl_2.tar.gz?raw=true")
+            message("Downloading sdl from:${SLD_DEP_LINK}" )
+            file(DOWNLOAD "${SLD_DEP_LINK}" ${CMAKE_CURRENT_SOURCE_DIR}/sdl_2.tar.gz  SHOW_PROGRESS STATUS status)
+            list(GET status 0 status_code)
+            list(GET status 1 status_string)
+            if(NOT status_code EQUAL 0)
+                message(WARN "error: downloading failed
+                status_code: ${status_code}
+                status_string: ${status_string}")
+            else()
+                message("Download succeeded")
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} -E tar xzf sdl_2.tar.gz 
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    )
+            endif()  
         else()
         execute_process(
             COMMAND ${HG_EXECUTABLE} clone https://hg.libsdl.org/SDL SDL

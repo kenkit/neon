@@ -9,7 +9,7 @@ extraction:
         - export CFLAGS="-m64 -fPIC" && export CXXFLAGS="-m64 -fPIC" && export LDFLAGS="-m64 -fPIC"
         - mkdir _build
         - cd _build
-        - cmake .. -DFORCE_OPERATIONS=TRUE -DUSE_BOOST_THREAD=TRUE 
+        - cmake .. -DFORCE_OPERATIONS=TRUE -DUSE_BOOST_THREAD=TRUE -DDOWNLOAD_SDL2=TRUE
     index:
       build_command:
         - cd _build
