@@ -246,7 +246,7 @@ if(WIN32)
 endif()
   PRINT_CEF_CONFIG()
   
-add_dependencies(package_project ${CEF_TARGET})
+
 if(WIN32)
     add_custom_target(
         package_project  ALL  
@@ -262,3 +262,4 @@ else()
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
             )
 endif()
+add_dependencies(package_project ${CEF_TARGET})
