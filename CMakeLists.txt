@@ -111,29 +111,30 @@ else()
             message("Download succeeded")
         endif()  
     endif()
-endif()
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz AND NOT FORCE_OPERATIONS)
-    if (WIN32)
-            message("Extracting cef_binary.tar.bz")
-            execute_process(
-                COMMAND ${7ZIP_EXECUTABLE} x -y -r cef_binary.tar.bz
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                )
-            message("Extracting cef_binary.tar")
-            execute_process(
-                    COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz AND NOT FORCE_OPERATIONS)
+        if (WIN32)
+                message("Extracting cef_binary.tar.bz")
+                execute_process(
+                    COMMAND ${7ZIP_EXECUTABLE} x -y -r cef_binary.tar.bz
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
-    else()
-            message("Extracting cef_binary.tar.bz")
+                message("Extracting cef_binary.tar")
                 execute_process(
-                COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                )
+                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        )
+        else()
+                message("Extracting cef_binary.tar.bz")
+                    execute_process(
+                    COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    )
+        endif()
+    else()
+        message("Could not find:${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz")
     endif()
-else()
-      message("Could not find:${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz")
 endif()
+
 
 #/////////////////////////////////////////////////////////////////////////////
 message("Setting CMAKE_MODULE_PATH TO :${CEF_ROOT}/cmake")
