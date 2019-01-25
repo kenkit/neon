@@ -5,3 +5,5 @@ cef_binary_*
 include/version.h
 NeonTech.zip
 SDL
+*.tar
+*.bz

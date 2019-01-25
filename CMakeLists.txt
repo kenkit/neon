@@ -222,13 +222,15 @@ include_directories(
   ADD_LOGICAL_TARGET(libcef_lib ${CEF_LIB_DEBUG} ${CEF_LIB_RELEASE})
   SET_EXECUTABLE_TARGET_PROPERTIES(${CEF_TARGET})
   #include_directories(D:/Programming/cef)
-  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} SDL2::SDL2 SDL2::SDL2main )
-
-  if(USE_SANDBOX)
+set(USE_SANDBOX FALSE)
+if(USE_SANDBOX)
     # Logical target used to link the cef_sandbox library.
     ADD_LOGICAL_TARGET("cef_sandbox_lib" "${CEF_SANDBOX_LIB_DEBUG}" "${CEF_SANDBOX_LIB_RELEASE}")
     target_link_libraries(${CEF_TARGET} cef_sandbox_lib ${CEF_SANDBOX_STANDARD_LIBS} )
-  endif()
+else()
+    target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} SDL2::SDL2 SDL2::SDL2main )
+endif()
+
 
   # Add the custom manifest files to the executable.
  # ADD_WINDOWS_MANIFEST("${CMAKE_CURRENT_SOURCE_DIR}" "${CEF_TARGET}" "exe")
