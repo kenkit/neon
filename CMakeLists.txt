@@ -81,7 +81,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     endif()
     message("32 BIT MACHINE")
 endif()
-
+message("CEF ROOT IS:${CEF_ROOT}")
 if(EXISTS "${CEF_ROOT}"  AND NOT FORCE_OPERATIONS)
     message("Found existing cef binary dir(${CEF_ROOT}), not extracting")
 else()
