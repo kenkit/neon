@@ -5,15 +5,15 @@
 [![Build Status](https://travis-ci.org/kenkit/neon.svg?branch=master)](https://travis-ci.org/kenkit/neon)
 [![codecov](https://codecov.io/gh/kenkit/neon/branch/master/graph/badge.svg)](https://codecov.io/gh/kenkit/neon)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5790aa30048346f99e3342b84a2fec8a)](https://app.codacy.com/app/kenkit/neon?utm_source=github.com&utm_medium=referral&utm_content=kenkit/neon&utm_campaign=Badge_Grade_Dashboard)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/kenkit/neon.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kenkit/neon/alerts/)
 
-Neon is a project designed by Neon Itelligence.
+Neon was designed by Neon Itelligence.
 
 ## Features
 
 -   Video Playback with FFMPEG.
 -   File download manager.
 -   Everything is a WIP atm.
--   To Do fix readme
 
 ## Installation
 
@@ -43,7 +43,7 @@ To build Neon you must have cmake, the rest is almost automated
 
 Generating prebuilt zip archives for distribution:
 
-    cmake --build ../build
+    cmake --build ../build --target neon
 
 ## Todos
 
@@ -56,12 +56,6 @@ MIT
 
 ## Software used in this project
 
-   [ogre3d](https://github.com/ogreCave/ogre)
+   [SDL](https://hg.libsdl.org/SDL)
 
-   [ffmpeg](https://github.com/FFmpeg/ffmpeg)
-
-   [libcurl](https://github.com/curl/curl)
-
-   [json](https://github.com/nlohmann/json)
-
-   [simplewebsocketserver](https://github.com/eidheim/Simple-WebSocket-Server)
+   [CEF](https://bitbucket.org/chromiumembedded/cef)
