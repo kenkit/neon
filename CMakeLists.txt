@@ -85,8 +85,6 @@ message("CEF ROOT IS:${CEF_ROOT}")
 if(EXISTS "${CEF_ROOT}"  AND NOT FORCE_OPERATIONS)
     message("Found existing cef binary dir(${CEF_ROOT}), not extracting")
 else()
-    message("dir(${CEF_ROOT}) is empty extracting..")
-    message("Extracting cef binaries")
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz AND NOT FORCE_OPERATIONS)
         message("Found existing binary archive(${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz), not downloading" )
     else()
@@ -102,8 +100,9 @@ else()
             message("Download succeeded")
         endif()  
     endif()
-    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz AND NOT FORCE_OPERATIONS)
-        if (WIN32)
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz AND NOT FORCE_OPERATIONS)
+    if (WIN32)
             message("Extracting cef_binary.tar.bz")
             execute_process(
                 COMMAND ${7ZIP_EXECUTABLE} x -y -r cef_binary.tar.bz
@@ -114,16 +113,15 @@ else()
                     COMMAND ${7ZIP_EXECUTABLE} x  -y -r cef_binary.tar
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
-        else()
+    else()
             message("Extracting cef_binary.tar.bz")
                 execute_process(
                 COMMAND ${CMAKE_COMMAND} -E tar xzf cef_binary.tar.bz 
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 )
-        endif()
-    else()
-      message("Could not find:${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz")
     endif()
+else()
+      message("Could not find:${CMAKE_CURRENT_SOURCE_DIR}/cef_binary.tar.bz")
 endif()
 
 #/////////////////////////////////////////////////////////////////////////////
