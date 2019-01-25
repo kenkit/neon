@@ -10,10 +10,10 @@ Neon is a project designed by Neon Itelligence.
 
 ## Features
 
-* Video Playback with FFMPEG.
-* File download manager.
-* Everything is a WIP atm.
-* To Do fix readme
+  - Video Playback with FFMPEG.
+  - File download manager.
+  - Everything is a WIP atm.
+  - To Do fix readme
 
 ## Installation
 
@@ -25,7 +25,7 @@ We are working on an automated updater
 
 This project uses a number of plugins
 
-* Most of the features require installation of Neon Service 
+  - Most of the features require installation of Neon Service 
 
 ## Development
 
