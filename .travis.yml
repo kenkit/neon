@@ -11,4 +11,4 @@ before_script:
   - cd _build
   - cmake .. -DFORCE_OPERATIONS=FALSE -DCLONE_REPO=TRUE -DUSE_BOOST_THREAD=TRUE 
 
-script: cmake --build ../_build 
+script: cmake --build ../_build --target neon
