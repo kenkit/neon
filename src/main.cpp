@@ -289,7 +289,7 @@ int main(int argc, char * argv[])
 
                 browserClient = new BrowserClient(renderHandler);
 
-                browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "file:///D:/Programming/bak/html_gui_/awesome_progress.html", browserSettings, nullptr);
+                browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://localhost:4200/", browserSettings, nullptr);
 
                 // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
                 // browser->GetHost()->SendKeyEvent(...);

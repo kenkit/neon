@@ -169,10 +169,15 @@ else()
                 status_string: ${status_string}")
             else()
                 message("Download succeeded")
-                execute_process(
-                    COMMAND ${CMAKE_COMMAND} -E tar xzf sdl_2.tar.gz 
+                            execute_process(
+                    COMMAND ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz 
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
+                message("Extracting sdl_2.tar.tar")
+                execute_process(
+                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        )
             endif()  
         else()
         execute_process(
