@@ -186,8 +186,8 @@ else()
         endif()
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL" AND NOT FORCE_OPERATIONS)
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
         message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build
@@ -216,12 +216,11 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL" AND NOT FORCE_OPERATIONS)
             execute_process(
                 COMMAND ${CMAKE_COMMAND} --build build --target Install
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
-    endif()
-    if(WIN32)
+endif()
+if(WIN32)
         set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/cmake)
-    else()
+else()
         set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/lib/cmake/SDL2)
-    endif()
 endif()
 
 find_package(SDL2 REQUIRED)
