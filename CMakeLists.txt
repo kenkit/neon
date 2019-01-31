@@ -180,14 +180,14 @@ else()
                             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                             )
                 else()
-                        message("Extracting with  -E tar xzf  sdl_2.tar.gz ")
+                        message("Extracting with tar xzf  sdl_2.tar.gz ")
                         execute_process(
-                            COMMAND ${CMAKE_COMMAND} -E tar xzf  sdl_2.tar.gz 
+                            COMMAND ${CMAKE_COMMAND} tar xzf  sdl_2.tar.gz 
                             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                             )
-                        message("Extracting with  -E tar xzf  sdl_2.tar")
+                        message("Extracting with  tar xzf  sdl_2.tar")
                         execute_process(
-                            COMMAND ${CMAKE_COMMAND} -E tar xzf  sdl_2.tar
+                            COMMAND ${CMAKE_COMMAND} tar xzf  sdl_2.tar
                                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                                 )
                 endif()
