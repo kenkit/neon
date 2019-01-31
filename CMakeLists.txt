@@ -168,12 +168,12 @@ else()
                 status_code: ${status_code}
                 status_string: ${status_string}")
             else()
-                message("Download succeeded")
-                            execute_process(
+                message("Extracting with ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz ")
+                execute_process(
                     COMMAND ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz 
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
-                message("Extracting sdl_2.tar.tar")
+                message("Extracting with  ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar")
                 execute_process(
                         COMMAND ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -187,13 +187,11 @@ else()
 endif()
 
 
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL/build" AND NOT FORCE_OPERATIONS)
-        message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
-        execute_process(
+message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
+    execute_process(
             COMMAND ${CMAKE_COMMAND} -E make_directory  ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/
             )
-    endif()
     message("Generating sdl2 sources")
     execute_process(
         COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
