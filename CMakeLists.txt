@@ -168,16 +168,29 @@ else()
                 status_code: ${status_code}
                 status_string: ${status_string}")
             else()
-                message("Extracting with ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz ")
-                execute_process(
-                    COMMAND ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz 
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    )
-                message("Extracting with  ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar")
-                execute_process(
-                        COMMAND ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar
+                if(WIN32)
+                    message("Extracting with ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz ")
+                    execute_process(
+                        COMMAND ${7ZIP_EXECUTABLE} x -y -r sdl_2.tar.gz 
                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                         )
+                    message("Extracting with  ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar")
+                    execute_process(
+                            COMMAND ${7ZIP_EXECUTABLE} x  -y -r sdl_2.tar
+                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                            )
+                else()
+                        message("Extracting with  -E tar xzf  sdl_2.tar.gz ")
+                        execute_process(
+                            COMMAND ${CMAKE_COMMAND} -E tar xzf  sdl_2.tar.gz 
+                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                            )
+                        message("Extracting with  -E tar xzf  sdl_2.tar")
+                        execute_process(
+                            COMMAND ${CMAKE_COMMAND} -E tar xzf  sdl_2.tar
+                                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                                )
+                endif()
             endif()  
         else()
         execute_process(
