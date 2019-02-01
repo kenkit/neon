@@ -1,7 +1,7 @@
 path_classifiers:
-  exclude:
-    -"cef_binary_*"
-    -"SDL*"
+  legacy:
+    -"cef_binary_3.3578.1864.gfa073f3_linux64"
+    -"SDL2"
 extraction:
   cpp:
     prepare:
