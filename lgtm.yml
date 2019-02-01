@@ -1,3 +1,6 @@
+exclude:
+  -cef_binary_*
+  -SDL
 extraction:
   cpp:
     prepare:
