@@ -1,6 +1,7 @@
-exclude:
-  -cef_binary_*
-  -SDL
+path_classifiers:
+  exclude:
+    -"cef_binary_*"
+    -"SDL*"
 extraction:
   cpp:
     prepare:
