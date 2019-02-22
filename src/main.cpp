@@ -275,7 +275,7 @@ int main(int argc, char * argv[])
             // create browser-window
             CefRefPtr<CefBrowser> browser;
             CefRefPtr<BrowserClient> browserClient;
-             CefWindowHandle windowHandle;
+             CefWindowHandle windowHandle=NULL;
             /*
              SDL_SysWMinfo windowInfo;
             SDL_VERSION(&windowInfo.version);
