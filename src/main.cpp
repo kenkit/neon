@@ -48,7 +48,8 @@ public:
             int texture_pitch = 0;
 
             SDL_LockTexture(texture, 0, (void **)&texture_data, &texture_pitch);
-            memcpy(texture_data, buffer, w * h * 4);
+            int texture_size= w * h * 4;
+            memcpy(texture_data, buffer, texture_size);
             SDL_UnlockTexture(texture);
         }
     }
@@ -148,6 +149,7 @@ public:
     {
         std::cout << "OnLoadError()" << std::endl;
         loaded = true;
+        return false;
     }
 
     void OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward)
@@ -273,7 +275,7 @@ int main(int argc, char * argv[])
             // create browser-window
             CefRefPtr<CefBrowser> browser;
             CefRefPtr<BrowserClient> browserClient;
-             CefWindowHandle windowHandle;
+             CefWindowHandle windowHandle=NULL;
             /*
              SDL_SysWMinfo windowInfo;
             SDL_VERSION(&windowInfo.version);

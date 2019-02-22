@@ -145,6 +145,9 @@ execute_process(
 execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_SOURCE_DIR}/patch_files/cef_variables.cmake  ${CEF_ROOT}/cmake/cef_variables.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+if (POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
 find_package(CEF REQUIRED)
 
 
