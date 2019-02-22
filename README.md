@@ -7,6 +7,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5790aa30048346f99e3342b84a2fec8a)](https://app.codacy.com/app/kenkit/neon?utm_source=github.com&utm_medium=referral&utm_content=kenkit/neon&utm_campaign=Badge_Grade_Dashboard)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/kenkit/neon.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kenkit/neon/context:cpp)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/kenkit/neon.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kenkit/neon/alerts/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2473/badge)](https://bestpractices.coreinfrastructure.org/projects/2473)
 
 Neon was designed by Neon Itelligence.
 

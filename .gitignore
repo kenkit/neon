@@ -10,3 +10,5 @@ SDL
 node_modules
 package-lock.json
 package.json
+.vscode/settings.json
+sdl_2.tar.gz
