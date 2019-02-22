@@ -149,7 +149,7 @@ public:
     {
         std::cout << "OnLoadError()" << std::endl;
         loaded = true;
-        return loaded;
+        return false;
     }
 
     void OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward)
