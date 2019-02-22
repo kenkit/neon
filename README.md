@@ -35,6 +35,12 @@ Want to contribute? Great!
 
 Just create a pull request, we will be happy to integrate new features.
 
+Also include your profile badge  in the readme.
+
+## Developers
+
+[![KENKIT](https://www.codewars.com/users/kenkit/badges/large)](https://www.codewars.com/users/kenkit)
+
 ## Building for source
 
 To build Neon you must have cmake, the rest is almost automated
