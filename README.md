@@ -35,7 +35,7 @@ Want to contribute? Great!
 
 Just create a pull request, we will be happy to integrate new features.
 
-Also include your profile badge  in the readme.
+Also include your codewars profile badge  in the readme.
 
 ## Developers
 
