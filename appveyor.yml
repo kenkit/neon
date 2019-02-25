@@ -70,11 +70,11 @@ artifacts:
   name: NeonTech.zip
 before_deploy:
 - ps: >-
-    echo "NEON CHANGELOG"  | Add-Content tmp
+    echo "NEON CHANGELOG"  | Add-Content  -Encoding UTF8 -Path tmp
 
-    echo "************************"  | Add-Content tmp
+    echo "************************"  | Add-Content  -Encoding UTF8 -Path tmp
 
-    git log -10  --pretty="%aD--%B" |Add-Content tmp
+    git log -10   --pretty="%an:%aD--%B" |Add-Content  -Encoding UTF8 -Path tmp
 
     $currntly=(Resolve-Path .\).Path
 
