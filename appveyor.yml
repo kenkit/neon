@@ -74,7 +74,7 @@ before_deploy:
 
     echo "************************"  | Add-Content tmp
 
-    git log -10  --pretty="%an:%aD--%B" |Add-Content tmp
+    git log -10  --pretty="%aD--%B" |Add-Content tmp
 
     $currntly=(Resolve-Path .\).Path
 
