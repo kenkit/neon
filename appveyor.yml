@@ -74,7 +74,7 @@ before_deploy:
 
     echo "************************"  | Add-Content  -Encoding UTF8 -Path tmp
 
-    git log -10   --pretty="%an:%aD--%B" |Add-Content  -Encoding UTF8 -Path tmp
+    git log -10   --pretty="%aD--%B" |Add-Content  -Encoding UTF8 -Path tmp
 
     $currntly=(Resolve-Path .\).Path
 
