@@ -61,8 +61,7 @@ Generating prebuilt zip archives for distribution:
 
 ## Todos
 
--   Write Test system
--   See HTML in the right
+-   Merge the original branch into this one.
 
 ## License
 
