@@ -17,6 +17,12 @@ Neon was designed by Neon Itelligence.
 -   File download manager.
 -   Everything is a WIP atm.
 
+## Screenshots
+
+<img src="https://i.imgur.com/NxbK0nY.gif"  style="max-width: 100%; min-height: 376px;" />
+
+<img src="https://aws1.discourse-cdn.com/standard10/uploads/dearimgui/optimized/1X/db6f749f230bd57996d7accbfa025a3cb0cf2fb0_2_690x457.gif" width="690" height="455" />
+
 ## Installation
 
 Just download the zip file from the release tab on our github repo.
@@ -27,7 +33,7 @@ We are working on an automated updater
 
 This project uses a number of plugins
 
--   Most of the features require installation of Neon Service 
+-   Most of the features require installation of Neon Service [Neon_Service](https://github.com/kenkit/neon_service)
 
 ## Development
 
