@@ -4,7 +4,7 @@ pull_request_rules:
       - '#approved-reviews-by>=1'
       - status-success=continuous-integration/appveyor/pr
       - status-success=continuous-integration/travis-ci/pr
-      - 'status-success=LGTM analysis'
+      - 'status-success=LGTM analysis: C/C++'
       - 'status-success=Codacy/PR Quality Review'
     actions:
       merge:
