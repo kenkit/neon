@@ -33,7 +33,7 @@ We are working on an automated updater
 
 This project uses a number of plugins
 
--   Most of the features require installation of Neon Service 
+-   Most of the features require installation of Neon Service [Neon_Service](https://github.com/kenkit/neon_service)
 
 ## Development
 
