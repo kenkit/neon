@@ -47,6 +47,8 @@ Also include your codewars profile badge  in the readme.
 
 [![KENKIT](https://www.codewars.com/users/kenkit/badges/large)](https://www.codewars.com/users/kenkit)
 
+<img src="https://wakatime.com/share/@Sage/248720b9-6ccd-4cf8-a45d-0801fa388c3b.svg" />
+
 ## Building for source
 
 To build Neon you must have cmake, the rest is almost automated
