@@ -47,7 +47,7 @@ Also include your codewars profile badge  in the readme.
 
 [![KENKIT](https://www.codewars.com/users/kenkit/badges/large)](https://www.codewars.com/users/kenkit)
 
-<img src="https://wakatime.com/share/@Sage/248720b9-6ccd-4cf8-a45d-0801fa388c3b.svg" />
+<img src="https://wakatime.com/share/@Sage/248720b9-6ccd-4cf8-a45d-0801fa388c3b.svg"  width="528" height="396" />
 
 ## Building for source
 
