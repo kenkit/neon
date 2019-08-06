@@ -88,7 +88,7 @@ class BrowserClient :
 {
 public:
     BrowserClient(CefRefPtr<CefRenderHandler> ptr) :
-        handler(ptr)
+       explicit  handler(ptr), browser_id(0)
     {
     }
 
