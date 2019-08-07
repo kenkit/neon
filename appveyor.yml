@@ -63,8 +63,6 @@ build_script:
     cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
     
     cmake --build ../build --target package_project
-
-    
 artifacts:
 - path: NeonTech.zip
   name: NeonTech.zip
@@ -93,5 +91,3 @@ deploy:
     secure: 01oN0sew4MzhHwKsFR7WSabMnqgCt2gZtjS6ywYslcnGyt7XFnOIbzNBfwSTV1Xc
   repository: kenkit/neon
   artifact: NeonTech.zip
-
-  
