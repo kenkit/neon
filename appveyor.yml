@@ -1,93 +1,93 @@
 version: 1.0.{build}
 branches:
   only:
-  - master
+    - master
 skip_tags: true
 build:
   verbosity: minimal
 image: Visual Studio 2017
 environment:
- global:
-  paperkey:
-    secure: MxOJZPR1tTkos0f/z1rM4fjHtWmg4kR3B6uAz8u59R5uDteHyeOSFYwATBPonHVC8oSKAWyrtma2Krk1fIXPMJs+FizIDsxh8VhsgMaeNnU=
+  global:
+    paperkey:
+      secure: MxOJZPR1tTkos0f/z1rM4fjHtWmg4kR3B6uAz8u59R5uDteHyeOSFYwATBPonHVC8oSKAWyrtma2Krk1fIXPMJs+FizIDsxh8VhsgMaeNnU=
 build_script:
-- cmd: >-
-    git submodule update --init --recursive
+  - cmd: >-
+      git submodule update --init --recursive
 
-    REM curl -fsS -o keybase_setup_amd64.msi "https://prerelease.keybase.io/keybase_setup_amd64.msi"
+      REM curl -fsS -o keybase_setup_amd64.msi "https://prerelease.keybase.io/keybase_setup_amd64.msi"
 
-    REM curl -fsS -o cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2 "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2"
+      REM curl -fsS -o cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2 "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2"
 
-    REM start /wait msiexec.exe /i keybase_setup_amd64.msi   /quiet /l*v keybase.log
+      REM start /wait msiexec.exe /i keybase_setup_amd64.msi   /quiet /l*v keybase.log
 
-    REM type keybase.log
-    
-    REM set PATH=%PATH%;%localappdata%\Keybase\
+      REM type keybase.log
 
-    REM keybase -v
+      REM set PATH=%PATH%;%localappdata%\Keybase\
 
-    REM echo "loging in to keybase"
+      REM keybase -v
 
-    REM keybase oneshot -u kenkit --paperkey "%paperkey%"
+      REM echo "loging in to keybase"
 
-    REM set FFMPEG=%cd%\ffmpeg\ffmpeg
+      REM keybase oneshot -u kenkit --paperkey "%paperkey%"
 
-    REM echo "FFMPEG DIR:%FFMPEG%" 
+      REM set FFMPEG=%cd%\ffmpeg\ffmpeg
 
-    REM call 7z x  -y -r ffmpeg_dependancies.zip
+      REM echo "FFMPEG DIR:%FFMPEG%" 
 
-    REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && REM call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
+      REM call 7z x  -y -r ffmpeg_dependancies.zip
 
-    REM set CEF_ROOT=%cd%\cef_binary_3.3578.1860.g36610bd_windows32
-    
-    REM copy /b/v/y imgui-files\cef_macros.cmake %CEF_ROOT%\cmake
+      REM call 7z x  -y -r "cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2" && REM call 7z x  -y -r  "cef_binary_3.3578.1860.g36610bd_windows32.tar"
 
-    REM copy /b/v/y imgui-files\cef_variables.cmake %CEF_ROOT%\cmake
+      REM set CEF_ROOT=%cd%\cef_binary_3.3578.1860.g36610bd_windows32
 
-    mkdir build
-    
-    cd build
-    
-    mkdir OGRE
+      REM copy /b/v/y imgui-files\cef_macros.cmake %CEF_ROOT%\cmake
 
-    REM set OGRE_DIR=%cd%\OGRE\build\sdk\CMake
+      REM copy /b/v/y imgui-files\cef_variables.cmake %CEF_ROOT%\cmake
 
-    REM set OGRE_HOME=%cd%\OGRE
+      mkdir build
 
-    REM set SDL2_DIR=%OGRE_HOME%\build\sdk\ogredeps\cmake
+      cd build
 
-    REM echo "Ogre:%OGRE_DIR%"
+      mkdir OGRE
 
-    set BOOST_ROOT=C:\Libraries\boost_1_67_0
+      REM set OGRE_DIR=%cd%\OGRE\build\sdk\CMake
 
-    cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
-    
-    cmake --build ../build --target package_project
+      REM set OGRE_HOME=%cd%\OGRE
+
+      REM set SDL2_DIR=%OGRE_HOME%\build\sdk\ogredeps\cmake
+
+      REM echo "Ogre:%OGRE_DIR%"
+
+      set BOOST_ROOT=C:\Libraries\boost_1_67_0
+
+      cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
+
+      cmake --build ../build --target package_project
 artifacts:
-- path: NeonTech.zip
-  name: NeonTech.zip
+  - path: NeonTech.zip
+    name: NeonTech.zip
 before_deploy:
-- ps: >-
-    echo "NEON CHANGELOG"  | Add-Content  -Encoding UTF8 -Path tmp
+  - ps: >-
+      echo "NEON CHANGELOG"  | Add-Content  -Encoding UTF8 -Path tmp
 
-    echo "************************"  | Add-Content  -Encoding UTF8 -Path tmp
+      echo "************************"  | Add-Content  -Encoding UTF8 -Path tmp
 
-    git log -10   --pretty="%aD--%B" |Add-Content  -Encoding UTF8 -Path tmp
+      git log -10   --pretty="%aD--%B" |Add-Content  -Encoding UTF8 -Path tmp
 
-    $currntly=(Resolve-Path .\).Path
+      $currntly=(Resolve-Path .\).Path
 
-    cd $currntly
+      cd $currntly
 
-    $rnp = Resolve-Path("tmp")
+      $rnp = Resolve-Path("tmp")
 
-    $rnc = [IO.File]::ReadAllText($rnp)
+      $rnc = [IO.File]::ReadAllText($rnp)
 
-    Set-AppveyorBuildVariable -Name release_description -Value $rnc
+      Set-AppveyorBuildVariable -Name release_description -Value $rnc
 
 deploy:
-- provider: GitHub
-  description: $(release_description)
-  auth_token:
-    secure: 01oN0sew4MzhHwKsFR7WSabMnqgCt2gZtjS6ywYslcnGyt7XFnOIbzNBfwSTV1Xc
-  repository: kenkit/neon
-  artifact: NeonTech.zip
+  - provider: GitHub
+    description: $(release_description)
+    auth_token:
+      secure: 01oN0sew4MzhHwKsFR7WSabMnqgCt2gZtjS6ywYslcnGyt7XFnOIbzNBfwSTV1Xc
+    repository: kenkit/neon
+    artifact: NeonTech.zip
