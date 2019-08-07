@@ -6,6 +6,7 @@ pull_request_rules:
       - status-success=continuous-integration/travis-ci/pr
       - 'status-success=LGTM analysis: C/C++'
       - 'status-success=Codacy/PR Quality Review'
+      - 'status-success=CodeFactor'
     actions:
       merge:
         method: merge
