@@ -31,7 +31,7 @@ build_script:
     REM keybase oneshot -u kenkit --paperkey "%paperkey%"
 
     REM set FFMPEG=%cd%\ffmpeg\ffmpeg
-
+    
     REM echo "FFMPEG DIR:%FFMPEG%" 
 
     REM call 7z x  -y -r ffmpeg_dependancies.zip
@@ -59,7 +59,7 @@ build_script:
     REM echo "Ogre:%OGRE_DIR%"
 
     set BOOST_ROOT=C:\Libraries\boost_1_67_0
-
+    
     cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
     
     cmake --build ../build --target package_project
