@@ -9,6 +9,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/kenkit/neon.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kenkit/neon/alerts/)
 [![CodeFactor](https://www.codefactor.io/repository/github/kenkit/neon/badge)](https://www.codefactor.io/repository/github/kenkit/neon)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2473/badge)](https://bestpractices.coreinfrastructure.org/projects/2473)
+[![code-size](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)
 
 Neon was designed by Neon Itelligence.
 
