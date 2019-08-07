@@ -37,7 +37,6 @@ public:
     void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect)
     {
         rect = CefRect(0, 0, width, height);
-       
     }
 
     void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects, const void * buffer, int w, int h)
