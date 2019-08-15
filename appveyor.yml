@@ -64,7 +64,7 @@ build_script:
 
       cmake --build ../build --config Release
 
-      cpack .
+      cpack . -C Release
 artifacts:
   - path: 'build/NeonInstaller*-win32.exe'
     name: NeonInstaller-win32.exe
