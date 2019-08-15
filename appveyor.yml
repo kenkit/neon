@@ -60,12 +60,14 @@ build_script:
 
       set BOOST_ROOT=C:\Libraries\boost_1_67_0
 
-      cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/
+      cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
 
-      cmake --build ../build --target package_project
+      cmake --build ../build --config Release
+
+      cpack .
 artifacts:
-  - path: NeonTech.zip
-    name: NeonTech.zip
+  - path: 'build/NeonInstaller*-win32.exe'
+    name: NeonInstaller-win32.exe
 before_deploy:
   - ps: >-
       echo "NEON CHANGELOG"  | Add-Content  -Encoding UTF8 -Path tmp
@@ -90,4 +92,4 @@ deploy:
     auth_token:
       secure: 01oN0sew4MzhHwKsFR7WSabMnqgCt2gZtjS6ywYslcnGyt7XFnOIbzNBfwSTV1Xc
     repository: kenkit/neon
-    artifact: NeonTech.zip
+    artifact: NeonInstaller-win32.exe
