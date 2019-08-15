@@ -329,6 +329,7 @@ install(DIRECTORY $<TARGET_FILE_DIR:${CEF_TARGET}>/ DESTINATION  .
 # Package Generator  #######################################################
 
 #set(CPACK_COMPONENT_ALL ResourceFiles)
+#set(CPACK_COMPONENT_ALL applications)
 set(CPACK_GENERATOR  "WIX")
 set(CPACK_PACKAGE_NAME "NeonInstaller")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neon User Interface")
@@ -377,7 +378,7 @@ set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/\\\\icon.ico")
     "http://www.cmake.org" "CMake Web Site")]]
 ENDIF(WIN32 AND NOT UNIX)
 set(CPACK_PACKAGE_CONTACT "webmaster@deadevice.com")
-
+#set(CPACK_WIX_PATCH_FILE "${CMAKE_CURRENT_SOURCE_DIR}/after_install.xml")
 
 INCLUDE(CPack)
 
