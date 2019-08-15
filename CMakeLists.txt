@@ -324,7 +324,7 @@ RUNTIME
 DESTINATION .
 COMPONENT applications)
 
-install(DIRECTORY $<TARGET_FILE_DIR:${CEF_TARGET}> DESTINATION  .
+install(DIRECTORY $<TARGET_FILE_DIR:${CEF_TARGET}>/ DESTINATION  .
 COMPONENT ResourceFiles
 )
 
@@ -344,17 +344,24 @@ set(CPACK_PACKAGE_VERSION_MINOR "${MY_PROGRAM_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${MY_PROGRAM_VERSION_PATCH}")
 message("Version :${MY_PROGRAM_VERSION_MAJOR}.${MY_PROGRAM_VERSION_MINOR}.${MY_PROGRAM_VERSION_PATCH}")
 
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Neon Install Directory")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Neon")
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+  CreateShortCut \\\"$DESKTOP\\\\${CEF_TARGET}.lnk\\\" \\\"$INSTDIR\\\\${CEF_TARGET}.exe\\\"
+")
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+  Delete \\\"$DESKTOP\\\\${CEF_TARGET}.lnk\\\"
+")
 set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/\\\\icon.ico")
  #SET(CPACK_NSIS_INSTALLED_ICON_NAME "neon.exe")
   SET(CPACK_NSIS_DISPLAY_NAME "Neon")
   SET(CPACK_NSIS_HELP_LINK "https://github.com/kenkit/neon/issues")
   SET(CPACK_NSIS_URL_INFO_ABOUT "https://neonintelligence.com/")
   SET(CPACK_NSIS_CONTACT "webmaster@deadevice.com")
-  SET(CPACK_NSIS_MODIFY_PATH ON)
+  SET(CPACK_NSIS_MODIFY_PATH OFF)
 ENDIF(WIN32 AND NOT UNIX)
 set(CPACK_PACKAGE_CONTACT "webmaster@deadevice.com")
 
