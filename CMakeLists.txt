@@ -214,12 +214,12 @@ message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build)
         message("building sdl2 from sources")    
     execute_process(
-        COMMAND ${CMAKE_COMMAND} --build build
+        COMMAND ${CMAKE_COMMAND} --build build --config ${CMAKE_BUILD_TYPE} 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
     if(NOT WIN32)
         message("installing sdl2 to:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/")    
         execute_process(
-            COMMAND make install
+            COMMAND  ${CMAKE_COMMAND} --build build --config ${CMAKE_BUILD_TYPE}  --target Install
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/)
     else()
         message("generating sources") 
@@ -228,7 +228,7 @@ message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build) 
         message("building sdl2 from sources")   
             execute_process(
-                COMMAND ${CMAKE_COMMAND} --build build --target Install
+                COMMAND ${CMAKE_COMMAND} --build build --target Install --config ${CMAKE_BUILD_TYPE}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
 endif()
 if(WIN32)
@@ -286,7 +286,7 @@ if(WIN32)
 endif()
   PRINT_CEF_CONFIG()
   
-
+#[[
 if(WIN32)
     add_custom_target(
         package_project  ALL  
@@ -302,4 +302,67 @@ else()
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
         )
 endif()
+
 add_dependencies(package_project ${CEF_TARGET})
+]]
+install(TARGETS ${CEF_TARGET}
+RUNTIME
+DESTINATION ${CMAKE_INSTALL_PREFIX}
+COMPONENT applications)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/ DESTINATION ${CMAKE_INSTALL_PREFIX}
+COMPONENT applications
+)
+
+# Package Generator  #######################################################
+
+set(CPACK_GENERATOR WIX)
+#set(CPACK_GENERATOR  "NSIS")
+set(CPACK_PACKAGE_NAME ${CEF_TARGET})
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neon Customer Interface")
+set(CPACK_PACKAGE_VENDOR "Sage,neonintelligence.com")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.md")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${MY_PROGRAM_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${MY_PROGRAM_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${MY_PROGRAM_VERSION_PATCH}")
+message("Version :${MY_PROGRAM_VERSION_MAJOR}.${MY_PROGRAM_VERSION_MINOR}.${MY_PROGRAM_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Neon Install Directory")
+IF(WIN32 AND NOT UNIX)
+  # There is a bug in NSI that does not handle full unix paths properly. Make
+  # sure there is at least one set of four (4) backlasshes.
+ #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+  SET(CPACK_NSIS_INSTALLED_ICON_NAME "neon.exe")
+  SET(CPACK_NSIS_DISPLAY_NAME "My Famous Project")
+  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
+  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
+  SET(CPACK_NSIS_CONTACT "me@my-personal-home-page.com")
+  SET(CPACK_NSIS_MODIFY_PATH ON)
+ELSE(WIN32 AND NOT UNIX)
+  SET(CPACK_STRIP_FILES "bin/neon.exee")
+  SET(CPACK_SOURCE_STRIP_FILES "")
+ENDIF(WIN32 AND NOT UNIX)
+SET(CPACK_PACKAGE_EXECUTABLES "neon.exe" "neon.exe")
+set(CPACK_PACKAGE_CONTACT "support@acme.corp")
+#set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+install(CODE "MESSAGE(\"CPACK_PACKAGING_PREFIX=${CPACK_PACKAGING_PREFIX}\")")
+install(CODE "MESSAGE(\"CMAKE_INSTALL_PREFIX=\${CMAKE_INSTALL_PREFIX}\")")
+install(CODE "MESSAGE(\"CPACK_INSTALL_PREFIX=${CPACK_INSTALL_PREFIX}\")")
+install(CODE "MESSAGE(\"CPACK_INSTALL_DIRECTORY=${CPACK_INSTALL_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_PACKAGE_INSTALL_DIRECTORY=${CPACK_PACKAGE_INSTALL_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_PACKAGING_INSTALL_PREFIX=${CPACK_PACKAGING_INSTALL_PREFIX}\")")
+install(CODE "MESSAGE(\"CPACK_PACKAGE_DIRECTORY=${CPACK_PACKAGE_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_TOPLEVEL_DIRECTORY=${CPACK_TOPLEVEL_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_TEMPORARY_DIRECTORY=${CPACK_TEMPORARY_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_OUTPUT_FILE_NAME=${CPACK_OUTPUT_FILE_NAME}\")")
+install(CODE "MESSAGE(\"CPACK_OUTPUT_FILE_PATH=${CPACK_OUTPUT_FILE_PATH}\")")
+install(CODE "MESSAGE(\"CPACK_TEMPORARY_PACKAGE_FILE_NAME=${CPACK_TEMPORARY_PACKAGE_FILE_NAME}\")")
+install(CODE "MESSAGE(\"CPACK_NATIVE_INSTALL_DIRECTORY=${CPACK_NATIVE_INSTALL_DIRECTORY}\")")
+install(CODE "MESSAGE(\"CPACK_TEMPORARY_INSTALL_DIRECTORY=${CPACK_TEMPORARY_INSTALL_DIRECTORY}\")")
+
+
+INCLUDE(CPack)
+
+
