@@ -224,27 +224,23 @@ message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
             )
     message("Generating sdl2 sources")
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
+        COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=Release
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build)
         message("building sdl2 from sources")    
     execute_process(
-        COMMAND ${CMAKE_COMMAND} --build build --config ${CMAKE_BUILD_TYPE} 
+        COMMAND ${CMAKE_COMMAND} --build build --config Release 
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
     if(NOT WIN32)
-        message("installing sdl2 to:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/")    
-        execute_process(
-            COMMAND make install
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/)
+            message("installing sdl2 to:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/")    
+            execute_process(
+                COMMAND make install
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/)
     else()
-        message("generating sources") 
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ../ -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} 
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build) 
-        message("building sdl2 from sources")   
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} --build build --target Install --config ${CMAKE_BUILD_TYPE}
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
-endif()
+            message("building sdl2 from sources")   
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --build build --target Install --config Release
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL)
+    endif()
 if(WIN32)
         set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/cmake)
 else()
@@ -290,13 +286,14 @@ endif()
   COPY_FILES("${CEF_TARGET}" "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
   COPY_FILES("${CEF_TARGET}" "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
 if(WIN32)
-  set(DLLFiles ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2${build_type2}.dll)
+  set(DLLFiles )
   foreach(DLLFile ${DLLFiles})
            add_custom_command(TARGET ${CEF_TARGET} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E
            copy_if_different  ${DLLFile}  $<TARGET_FILE_DIR:${CEF_TARGET}>
            )
   endforeach() 
+  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2.dll DESTINATION .)
 endif()
   PRINT_CEF_CONFIG()
   
@@ -322,16 +319,16 @@ add_dependencies(package_project ${CEF_TARGET})
 install(TARGETS ${CEF_TARGET}
 RUNTIME
 DESTINATION .
-COMPONENT applications)
+#COMPONENT applications
+)
 
 install(DIRECTORY $<TARGET_FILE_DIR:${CEF_TARGET}>/ DESTINATION  .
-COMPONENT ResourceFiles
+#COMPONENT ResourceFiles
 )
 
 # Package Generator  #######################################################
-#include (InstallRequiredSystemLibraries)
-#set(CPACK_GENERATOR WIX)
-set(CPACK_COMPONENT_ALL ResourceFiles)
+
+#set(CPACK_COMPONENT_ALL ResourceFiles)
 set(CPACK_GENERATOR  "NSIS")
 set(CPACK_PACKAGE_NAME "NeonInstaller")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neon User Interface")
@@ -362,6 +359,10 @@ set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/\\\\icon.ico")
   SET(CPACK_NSIS_URL_INFO_ABOUT "https://neonintelligence.com/")
   SET(CPACK_NSIS_CONTACT "webmaster@deadevice.com")
   SET(CPACK_NSIS_MODIFY_PATH OFF)
+  #[[
+  set(CPACK_NSIS_MENU_LINKS
+    "doc/cmake-@CMake_VERSION_MAJOR@.@CMake_VERSION_MINOR@/cmake.html" "CMake Help"
+    "http://www.cmake.org" "CMake Web Site")]]
 ENDIF(WIN32 AND NOT UNIX)
 set(CPACK_PACKAGE_CONTACT "webmaster@deadevice.com")
 
