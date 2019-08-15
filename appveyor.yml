@@ -66,8 +66,8 @@ build_script:
 
       cpack . -C Release --verbose
 artifacts:
-  - path: 'build/NeonInstaller*-win32.exe'
-    name: NeonInstaller-win32.exe
+  - path: 'build/NeonInstaller*-win32.msi'
+    name: NeonInstaller-win32.msi
 before_deploy:
   - ps: >-
       echo "NEON CHANGELOG"  | Add-Content  -Encoding UTF8 -Path tmp
@@ -92,4 +92,4 @@ deploy:
     auth_token:
       secure: 01oN0sew4MzhHwKsFR7WSabMnqgCt2gZtjS6ywYslcnGyt7XFnOIbzNBfwSTV1Xc
     repository: kenkit/neon
-    artifact: NeonInstaller-win32.exe
+    artifact: NeonInstaller-win32.msi

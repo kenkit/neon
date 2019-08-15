@@ -329,10 +329,10 @@ install(DIRECTORY $<TARGET_FILE_DIR:${CEF_TARGET}>/ DESTINATION  .
 # Package Generator  #######################################################
 
 #set(CPACK_COMPONENT_ALL ResourceFiles)
-set(CPACK_GENERATOR  "NSIS")
+set(CPACK_GENERATOR  "WIX")
 set(CPACK_PACKAGE_NAME "NeonInstaller")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neon User Interface")
-set(CPACK_PACKAGE_VENDOR "Sage,neonintelligence.com,deaddevice.com")
+set(CPACK_PACKAGE_VENDOR "Neon Intelligence Technologies Inc")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
 
@@ -345,6 +345,18 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Neon")
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
+
+set(CPACK_WIX_PRODUCT_ICON
+  "${CMAKE_CURRENT_SOURCE_DIR}/icon.ico"
+)
+set_property(INSTALL ${CEF_TARGET}
+  PROPERTY CPACK_START_MENU_SHORTCUTS "neon"
+)
+set(CPACK_CREATE_DESKTOP_LINKS ${CEF_TARGET})
+set(CPACK_PACKAGE_EXECUTABLES ${CEF_TARGET} "neon")
+set(CPACK_CREATE_DESKTOP_LINKS ${CEF_TARGET})
+set(CPACK_WIX_PROGRAM_MENU_FOLDER "Neon App")
+set(CPACK_WIX_UPGRADE_GUID "E1A2302C-DA02-4240-A762-6946456C2985")
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
   CreateShortCut \\\"$DESKTOP\\\\${CEF_TARGET}.lnk\\\" \\\"$INSTDIR\\\\${CEF_TARGET}.exe\\\"
 ")
