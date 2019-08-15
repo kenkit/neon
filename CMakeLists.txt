@@ -233,7 +233,7 @@ message("Creating SDL2 build directory:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build")
     if(NOT WIN32)
         message("installing sdl2 to:${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/")    
         execute_process(
-            COMMAND  ${CMAKE_COMMAND} --build build --config ${CMAKE_BUILD_TYPE}  --target Install
+            COMMAND make install
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/)
     else()
         message("generating sources") 
