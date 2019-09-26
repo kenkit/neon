@@ -284,18 +284,24 @@ endif()
  # ADD_WINDOWS_MANIFEST("${CMAKE_CURRENT_SOURCE_DIR}" "${CEF_TARGET}" "exe")
 
   # Copy binary and resource files to the target output directory.
-  COPY_FILES("${CEF_TARGET}" "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
-  COPY_FILES("${CEF_TARGET}" "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
+ # COPY_FILES("${CEF_TARGET}" "${CEF_BINARY_FILES}" "${CEF_BINARY_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
+  #COPY_FILES("${CEF_TARGET}" "${CEF_RESOURCE_FILES}" "${CEF_RESOURCE_DIR}" $<TARGET_FILE_DIR:${CEF_TARGET}>)
 if(WIN32)
-  set(DLLFiles )
-  foreach(DLLFile ${DLLFiles})
-           add_custom_command(TARGET ${CEF_TARGET} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E
-           copy_if_different  ${DLLFile}  $<TARGET_FILE_DIR:${CEF_TARGET}>
-           )
-  endforeach() 
-  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2.dll DESTINATION .)
+  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SDL/build/install/bin/SDL2${build_type2}.dll DESTINATION .)
 endif()
+FOREACH(file ${CEF_BINARY_FILES})
+    install(FILES ${CEF_BINARY_DIR}/${file} DESTINATION .)
+ENDFOREACH()
+FOREACH(file ${CEF_RESOURCE_FILES})
+    if(NOT ${file}  STREQUAL "locales")
+        if(NOT ${file}  STREQUAL "d3dcompiler_43.dll")
+            install(FILES ${CEF_RESOURCE_DIR}/${file} DESTINATION .)
+        endif()
+    else()
+        install(DIRECTORY ${CEF_RESOURCE_DIR}/${file} DESTINATION .)
+    endif()
+ENDFOREACH()
+
   PRINT_CEF_CONFIG()
   
 #[[
