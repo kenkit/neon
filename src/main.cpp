@@ -232,7 +232,7 @@ int main(int argc, char * argv[])
 
         // CefString(&settings.locales_dir_path).FromASCII("");
         CefString(&settings.resources_dir_path) = SDL_GetBasePath();
-
+        CefString(&settings.log_file) = CefString(L"neon.log");
         // checkout detailed settings options http://magpcss.org/ceforum/apidocs/projects/%28default%29/_cef_settings_t.html
         // nearly all the settings can be set via args too.
         // settings.multi_threaded_message_loop = true; // not supported, except windows
