@@ -12,25 +12,35 @@ environment:
       secure: MxOJZPR1tTkos0f/z1rM4fjHtWmg4kR3B6uAz8u59R5uDteHyeOSFYwATBPonHVC8oSKAWyrtma2Krk1fIXPMJs+FizIDsxh8VhsgMaeNnU=
 build_script:
   - cmd: >-
-      git submodule update --init --recursive
+      
 
-      REM curl -fsS -o keybase_setup_amd64.msi "https://prerelease.keybase.io/keybase_setup_amd64.msi"
+      curl -fsS -o keybase_setup_amd64.msi "https://prerelease.keybase.io/keybase_setup_amd64.msi"
 
       REM curl -fsS -o cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2 "http://opensource.spotify.com/cefbuilds/cef_binary_3.3578.1860.g36610bd_windows32.tar.bz2"
 
-      REM start /wait msiexec.exe /i keybase_setup_amd64.msi   /quiet /l*v keybase.log
+      start /wait msiexec.exe /i keybase_setup_amd64.msi   /quiet /l*v keybase.log
 
       REM type keybase.log
 
-      REM set PATH=%PATH%;%localappdata%\Keybase\
+      set PATH=%PATH%;%localappdata%\Keybase\
 
-      REM keybase -v
+      keybase -v
 
-      REM echo "loging in to keybase"
+      echo "loging in to keybase"
 
-      REM keybase oneshot -u kenkit --paperkey "%paperkey%"
+      keybase oneshot -u kenkit --paperkey "%paperkey%"
 
-      REM set FFMPEG=%cd%\ffmpeg\ffmpeg
+      git config --global --add protocol.keybase.allow always
+
+      cd ../
+
+      rm -fr neon
+
+      git clone keybase://private/kenkit/neon
+
+      cd neon
+
+      git submodule update --init --recursive
 
       REM echo "FFMPEG DIR:%FFMPEG%" 
 
@@ -48,7 +58,7 @@ build_script:
 
       cd build
 
-      mkdir OGRE
+      REM mkdir OGRE
 
       REM set OGRE_DIR=%cd%\OGRE\build\sdk\CMake
 
