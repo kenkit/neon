@@ -1,6 +1,5 @@
 # Neon Project
 
-[![GitHub Releases (by Release)](https://img.shields.io/github/downloads/kenkit/neon/latest/total)](https://github.com/kenkit/neon_installer/releases/latest)
 [![Build status](https://ci.appveyor.com/api/projects/status/dapr240j1ignrsrl?svg=true)](https://ci.appveyor.com/project/kenkit/neon)
 [![Build Status](https://travis-ci.org/kenkit/neon.svg?branch=master)](https://travis-ci.org/kenkit/neon)
 [![codecov](https://codecov.io/gh/kenkit/neon/branch/master/graph/badge.svg)](https://codecov.io/gh/kenkit/neon)
@@ -10,7 +9,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/kenkit/neon/badge)](https://www.codefactor.io/repository/github/kenkit/neon)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2473/badge)](https://bestpractices.coreinfrastructure.org/projects/2473)
 [![code-size](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)
-[![GitHub All Releases](https://img.shields.io/github/downloads/kenkit/neon/total?style=plastic)](https://github.com/kenkit/neon/releases/latest)
+[![GitHub Releases (by Release)](https://img.shields.io/github/downloads/kenkit/neon/latest/total)](https://github.com/kenkit/neon_installer/releases/latest)
 
 Neon was designed by Neon Itelligence.
 
