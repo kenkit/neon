@@ -27,6 +27,8 @@ build_script:
       keybase -v
 
       echo "loging in to keybase"
+      
+      ping -n 4 127.0.0.1>nul
 
       keybase oneshot -u kenkit --paperkey "%paperkey%"
 
