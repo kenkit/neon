@@ -10,7 +10,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/kenkit/neon/badge)](https://www.codefactor.io/repository/github/kenkit/neon)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2473/badge)](https://bestpractices.coreinfrastructure.org/projects/2473)
 [![code-size](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)](https://img.shields.io/github/languages/code-size/kenkit/neon.svg?color=44cc11)
-![GitHub All Releases](https://img.shields.io/github/downloads/kenkit/neon/total?style=plastic)
+[![GitHub All Releases](https://img.shields.io/github/downloads/kenkit/neon/total?style=plastic)](https://github.com/kenkit/neon/releases/latest)
 
 Neon was designed by Neon Itelligence.
 
