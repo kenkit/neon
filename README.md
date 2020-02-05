@@ -1,6 +1,6 @@
 # Neon Project
 
-[![GitHub release](https://img.shields.io/github/release/kenkit/neon.svg)](https://github.com/kenkit/neon/releases/latest)
+[![GitHub Releases (by Release)](https://img.shields.io/github/downloads/kenkit/neon_installer/latest/total)](https://github.com/kenkit/neon_installer/releases/latest)
 [![Build status](https://ci.appveyor.com/api/projects/status/dapr240j1ignrsrl?svg=true)](https://ci.appveyor.com/project/kenkit/neon)
 [![Build Status](https://travis-ci.org/kenkit/neon.svg?branch=master)](https://travis-ci.org/kenkit/neon)
 [![codecov](https://codecov.io/gh/kenkit/neon/branch/master/graph/badge.svg)](https://codecov.io/gh/kenkit/neon)
