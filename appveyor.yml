@@ -5,7 +5,7 @@ branches:
 skip_tags: true
 build:
   verbosity: minimal
-image: Visual Studio 2017
+image: Visual Studio 2019
 environment:
   global:
     paperkey:
@@ -72,7 +72,7 @@ build_script:
 
       set BOOST_ROOT=C:\Libraries\boost_1_67_0
 
-      cmake ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
+      cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
 
       cmake --build ../build --config Release
 
