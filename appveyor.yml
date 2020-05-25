@@ -41,6 +41,8 @@ build_script:
       git clone keybase://private/kenkit/neon
 
       cd neon
+      
+      git checkout  before_update
 
       git submodule update --init --recursive
 
