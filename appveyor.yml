@@ -12,6 +12,8 @@ environment:
       secure: MxOJZPR1tTkos0f/z1rM4fjHtWmg4kR3B6uAz8u59R5uDteHyeOSFYwATBPonHVC8oSKAWyrtma2Krk1fIXPMJs+FizIDsxh8VhsgMaeNnU=
     password:
       secure: RjmtameUusXhisMaJSPfbg==
+    priv_key:
+      secure: JzXFHdVn0Dizbao+lLC2aat+PkimGDkX5Hml063KZSfu05rt4igm1iYkTHPPm4OZI4WmVQSh6GRTS8BN30nduw==
 build_script:
   - cmd: >-
     
