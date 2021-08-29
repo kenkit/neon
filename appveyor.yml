@@ -74,7 +74,7 @@ build_script:
 
       set BOOST_ROOT=C:\Libraries\boost_1_71_0
 
-      cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release
+      cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release -DWINDOWS_KIT_VER=10.0.19041.0 -DVC_CRED_VER=14.29.30133 -DVC_EDITION=Community
 
       cmake --build ../build --config Release
 
