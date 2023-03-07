@@ -69,7 +69,7 @@ build_script:
 
       REM echo "Ogre:%OGRE_DIR%"
 
-      set BOOST_ROOT=C:\Libraries\boost_1_73_0
+      set BOOST_ROOT=C:\Libraries\boost_1_77_0
 
       cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release -DWINDOWS_KIT_VER=10.0.22000.0 -DVC_CRED_VER=14.34.31931 -DVC_EDITION=Community
 
