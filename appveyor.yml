@@ -101,6 +101,6 @@ deploy:
   - provider: GitHub
     description: $(release_description)
     auth_token:
-      secure: i2a9aEMUg9IUK+O7GIfYQWSERUI9/FRSLoKMcPRJdgW3RlJvTBN0hpgKpBJJsN4B
+      secure: dECcGXnwz7bnVQrlSBShwCtyMaRXo5VMvQLSKCOx9mEHNyYRFjmfX6fjMCMWnusR
     repository: kenkit/neon
     artifact: NeonInstaller-win32.msi
