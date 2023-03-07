@@ -5,7 +5,7 @@ branches:
 skip_tags: true
 build:
   verbosity: minimal
-image: Visual Studio 2019
+image: Visual Studio 2022
 environment:
   global:
     paperkey:
@@ -38,6 +38,8 @@ build_script:
       git clone  git@github.com:kenkit/neon_p.git  neon
 
       cd neon
+      
+      git checkout before_update
 
       git submodule update --init --recursive
 
@@ -69,7 +71,7 @@ build_script:
 
       set BOOST_ROOT=C:\Libraries\boost_1_73_0
 
-      cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release -DWINDOWS_KIT_VER=10.0.19041.0 -DVC_CRED_VER=14.29.30133 -DVC_EDITION=Community
+      cmake -A Win32 ../ -DOPENSSL_ROOT_DIR=C:/OpenSSL-Win32/ -DCMAKE_BUILD_TYPE=Release -DWINDOWS_KIT_VER=10.0.22000.0 -DVC_CRED_VER=14.34.31931 -DVC_EDITION=Community
 
       cmake --build ../build --config Release
 
