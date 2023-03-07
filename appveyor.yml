@@ -39,7 +39,7 @@ build_script:
 
       cd neon
       
-      git checkout 0851a4344f2683ceb496895f525ef0aa6bd9f577
+      git checkout  5434137468efae8dcdcdf032eff0d51a79294946
 
       git submodule update --init --recursive
 
